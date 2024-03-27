@@ -1,167 +1,88 @@
 function Footer() {
     return ( 
-        <footer id="t3-footer" className="wrap t3-footer">
-  <div className="footer-1 wrap t3-sl t3-sl-footer-1">
-    <div className="container">
-      <div className="row">
-        <div className="moduletable col-sm-3">
-          <div className="module_container">
-            <div className="mod-menu">
-              <ul className="menu list">
-                <li className="item-752">
-                  <a href="#">SPECIAL OFFERS &amp; DISCOUNT</a>
-                </li>
-                <li className="item-753">
-                  <a href="#">NEWS</a>
-                </li>
-                <li className="item-754">
-                  <a href="#">SHOPPING</a>
-                </li>
-                <li className="item-755">
-                  <a href="#">CAFES AND RESTAURANTS</a>
-                </li>
-                <li className="item-756">
-                  <a href="#">ENTERTAINMENT</a>
-                </li>
-                <li className="item-757">
-                  <a href="#">SERVICES</a>
-                </li>
-                <li className="item-758">
-                  <a href="index.php/about-us.html">ABOUT US</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="moduletable col-sm-3">
-          <div className="module_container">
-            <div className="mod-menu">
-              <ul className="menu list">
-                <li className="item-759">
-                  <a href="#">MAP OF shopping mall</a>
-                </li>
-                <li className="item-760">
-                  <a href="#">DIRECTIONS</a>
-                </li>
-                <li className="item-761">
-                  <a href="#">FOR TENANTS</a>
-                </li>
-                <li className="item-762">
-                  <a href="#">VACANCIES</a>
-                </li>
-                <li className="item-763">
-                  <a href="#">USEFUL LINKS</a>
-                </li>
-                <li className="item-764">
-                  <a href="#">SALES &amp; PROMOTIONS</a>
-                </li>
-                <li className="item-765">
-                  <a href="#">PARTNERS</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="moduletable col-sm-3">
-          <div className="module_container">
-            <div className="mod-menu">
-              <ul className="menu list">
-                <li className="bold">
-                  <span className="separator">Shopping Gallery</span>
-                </li>
-                <li>
-                  <span className="separator">10:00 am - 10:00 pm</span>
-                </li>
-                <li className="bold">
-                  <span className="separator">Shoping Area 2:</span>
-                </li>
-                <li>
-                  <span className="separator">08:30 am - 11.00 pm</span>
-                </li>
-                <li className="bold">
-                  <span className="separator">Shoping Area 2:</span>
-                </li>
-                <li>
-                  <span className="separator">Mon-Sat: 8.00 am – 9.30 pm</span>
-                </li>
-                <li>
-                  <span className="separator">Sunday: 9.00 am – 9.00 pm</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="moduletable col-sm-3">
-          <div className="module_container">
-            <div className="mod-menu">
-              <ul className="menu list">
-                <li className="bold">
-                  <span className="separator">City Bowling:</span>
-                </li>
-                <li>
-                  <span className="separator">
-                    Mon-Thu: 10:00 am - 02:00 am
-                  </span>
-                </li>
-                <li>
-                  <span className="separator">
-                    Fri-Sun: 10:00 am - 05:00 am
-                  </span>
-                </li>
-                <li className="bold">
-                  <span className="separator">Cafes and Restaurants:</span>
-                </li>
-                <li>
-                  <span className="separator">10:00 am - 10:00 pm</span>
-                </li>
-                <li className="bold">
-                  <span className="separator">Administration</span>
-                </li>
-                <li>
-                  <span className="separator">Mon-Fri: 09:00 am – 6:00 pm</span>
-                </li>
-                <li>
-                  <a href="tel:0311230580">+031 123 05 80</a>
-                </li>
-              </ul>
+      <footer className="footer-section">
+      <div className="newslater-section padding-bottom">
+        <div className="container">
+          <div
+            className="newslater-container bg_img"
+            data-background="assets/images/newslater/newslater-bg01.jpg"
+          >
+            <div className="newslater-wrapper">
+              <h5 className="cate">subscribe to Boleto </h5>
+              <h3 className="title">to get exclusive benifits</h3>
+              <form className="newslater-form">
+                <input type="text" placeholder="Your Email Address" />
+                <button type="submit">subscribe</button>
+              </form>
+              <p>We respect your privacy, so we never share your info</p>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div className="wrap t3-sl t3-sl-footer">
-    <div className="container">
-      <div className="row">
-        <div className="copyright col-sm-7">
-          <span>Copyright</span>
-          {/* <span class="siteName">cube.</span> */}
-          <span className="copy">©</span>
-          <span className="year">2024</span>
-          <span>All rights reserved</span>
+      <div className="container">
+        <div className="footer-top">
+          <div className="logo">
+            <a href="index-1.html">
+              <img src="assets/images/footer/footer-logo.png" alt="footer" />
+            </a>
+          </div>
+          <ul className="social-icons">
+            <li>
+              <a href="#0">
+                <i className="fab fa-facebook-f" />
+              </a>
+            </li>
+            <li>
+              <a href="#0" className="active">
+                <i className="fab fa-twitter" />
+              </a>
+            </li>
+            <li>
+              <a href="#0">
+                <i className="fab fa-pinterest-p" />
+              </a>
+            </li>
+            <li>
+              <a href="#0">
+                <i className="fab fa-google" />
+              </a>
+            </li>
+            <li>
+              <a href="#0">
+                <i className="fab fa-instagram" />
+              </a>
+            </li>
+          </ul>
         </div>
-        <div className="moduletable col-sm-5">
-          <div className="module_container">
-            <ul className="nav menu social">
-              <li className="item-148">
-                <a href="#" title="Facebook" className="fa fa-facebook" />
+        <div className="footer-bottom">
+          <div className="footer-bottom-area">
+            <div className="left">
+              <p>
+                Copyright © 2020.All Rights Reserved By <a href="#0">Boleto </a>
+              </p>
+            </div>
+            <ul className="links">
+              <li>
+                <a href="#0">About</a>
               </li>
-              <li className="item-150">
-                <a href="#" title="Twitter" className="fa fa-twitter" />
+              <li>
+                <a href="#0">Terms Of Use</a>
               </li>
-              <li className="item-149">
-                <a href="#" title="Google+" className="fa fa-google-plus" />
+              <li>
+                <a href="#0">Privacy Policy</a>
               </li>
-              <li className="item-152">
-                <a href="#" title="Skype" className="fa fa-skype" />
+              <li>
+                <a href="#0">FAQ</a>
+              </li>
+              <li>
+                <a href="#0">Feedback</a>
               </li>
             </ul>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</footer>
+    </footer>
+    
 
      );
 }
