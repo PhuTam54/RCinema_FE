@@ -1,6 +1,9 @@
-
-
-
+import city from "~/assets/images/ticket/city.png"
+import date from "~/assets/images/ticket/date.png"
+import cinema from "~/assets/images/ticket/cinema.png"
+import exp from "~/assets/images/ticket/exp.png"
+import sidebanner from "~/assets/images/sidebar/banner/banner03.jpg"
+import seatplan from "~/assets/images/movie/seat-plan.png"
 
 function MovieTicket() {
     
@@ -14,9 +17,9 @@ function MovieTicket() {
           <h6 className="subtitle">Welcome! </h6>
           <h4 className="title">Select Your Seats</h4>
           <div className="thumb">
-            <img src="assets/images/movie/seat-plan.png" alt="movie" />
+            <img src={seatplan} alt="movie" />
           </div>
-          <a href="movie-seat-plan.html" className="custom-button seatPlanButton">
+          <a href="/movieseat" className="custom-button seatPlanButton">
             Seat Plans
             <i className="fas fa-angle-right" />
           </a>
@@ -49,7 +52,7 @@ function MovieTicket() {
           <form className="ticket-search-form two">
             <div className="form-group">
               <div className="thumb">
-                <img src="assets/images/ticket/city.png" alt="ticket" />
+                <img src={city} alt="ticket" />
               </div>
               <span className="type">city</span>
               <select className="select-bar">
@@ -64,7 +67,7 @@ function MovieTicket() {
             </div>
             <div className="form-group">
               <div className="thumb">
-                <img src="assets/images/ticket/date.png" alt="ticket" />
+                <img src={date} alt="ticket" />
               </div>
               <span className="type">date</span>
               <select className="select-bar">
@@ -76,7 +79,7 @@ function MovieTicket() {
             </div>
             <div className="form-group">
               <div className="thumb">
-                <img src="assets/images/ticket/cinema.png" alt="ticket" />
+                <img src={cinema} alt="ticket" />
               </div>
               <span className="type">cinema</span>
               <select className="select-bar">
@@ -91,7 +94,7 @@ function MovieTicket() {
             </div>
             <div className="form-group">
               <div className="thumb">
-                <img src="assets/images/ticket/exp.png" alt="ticket" />
+                <img src={exp} alt="ticket" />
               </div>
               <span className="type">Experience</span>
               <select className="select-bar">
@@ -240,7 +243,7 @@ function MovieTicket() {
                 <div className="widget-1-body">
                   <a href="#0">
                     <img
-                      src="assets/images/sidebar/banner/banner03.jpg"
+                      src={sidebanner}
                       alt="banner"
                     />
                   </a>

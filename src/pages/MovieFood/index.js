@@ -1,4 +1,9 @@
-
+import banner4 from "~/assets/images/banner/banner04.jpg"
+import sidebanner from "~/assets/images/sidebar/banner/banner04.jpg"
+import pop1 from "~/assets/images/movie/popcorn/pop1.png"
+import pop2 from "~/assets/images/movie/popcorn/pop2.png"
+import pop3 from "~/assets/images/movie/popcorn/pop3.png"
+import pop4 from "~/assets/images/movie/popcorn/pop4.png"
 
 
 function MovieFood() {
@@ -9,7 +14,7 @@ function MovieFood() {
   {/* ==========Banner-Section========== */}
   <section
     className="details-banner hero-area bg_img seat-plan-banner"
-    data-background="assets/images/banner/banner04.jpg"
+    style={{ backgroundImage: `url(${banner4})` }}
   >
     <div className="container">
       <div className="details-banner-wrapper">
@@ -30,7 +35,7 @@ function MovieFood() {
       <div className="page-title-area">
         <div className="item md-order-1">
           <a
-            href="movie-ticket-plan.html"
+            href="/movieseat"
             className="custom-button back-button"
           >
             <i className="flaticon-double-right-arrows-angles" />
@@ -61,7 +66,7 @@ function MovieFood() {
         <div className="col-lg-8">
           <div className="c-thumb padding-bottom">
             <img
-              src="assets/images/sidebar/banner/banner04.jpg"
+              src={sidebanner}
               alt="sidebar/banner"
             />
           </div>
@@ -84,7 +89,7 @@ function MovieFood() {
                 <div className="grid-inner">
                   <div className="grid-thumb">
                     <img
-                      src="assets/images/movie/popcorn/pop1.png"
+                      src={pop1}
                       alt="movie/popcorn"
                     />
                     <div className="offer-tag">$57</div>
@@ -117,7 +122,7 @@ function MovieFood() {
                 <div className="grid-inner">
                   <div className="grid-thumb">
                     <img
-                      src="assets/images/movie/popcorn/pop2.png"
+                      src={pop2}
                       alt="movie/popcorn"
                     />
                     <div className="offer-tag">$57</div>
@@ -150,7 +155,7 @@ function MovieFood() {
                 <div className="grid-inner">
                   <div className="grid-thumb">
                     <img
-                      src="assets/images/movie/popcorn/pop3.png"
+                      src={pop3}
                       alt="movie/popcorn"
                     />
                     <div className="offer-tag">$57</div>
@@ -183,7 +188,7 @@ function MovieFood() {
                 <div className="grid-inner">
                   <div className="grid-thumb">
                     <img
-                      src="assets/images/movie/popcorn/pop4.png"
+                      src={pop4}
                       alt="movie/popcorn"
                     />
                     <div className="offer-tag">$57</div>
@@ -273,7 +278,7 @@ function MovieFood() {
               <span>Amount Payable</span>
               <span>$222</span>
             </h6>
-            <a href="#0" className="custom-button back-button">
+            <a href="/moviecheckout" className="custom-button back-button">
               proceed
             </a>
           </div>

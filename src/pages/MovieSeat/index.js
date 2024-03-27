@@ -1,7 +1,11 @@
-
-
-
-
+import banner4 from "~/assets/images/banner/banner04.jpg"
+import screen from "~/assets/images/movie/screen-thumb.png"
+import seat1 from "~/assets/images/movie/seat01.png"
+import seated1 from "~/assets/images/movie/seat01-free.png"
+import seat2 from "~/assets/images/movie/seat02.png"
+import seat2book from "~/assets/images/movie/seat02-booked.png"
+import seated2 from "~/assets/images/movie/seat02-free.png"
+import bannerproceed from "~/assets/images/movie/movie-bg-proceed.jpg"
 function MovieSeat() {
     
 
@@ -10,7 +14,7 @@ function MovieSeat() {
   {/* ==========Banner-Section========== */}
   <section
     className="details-banner hero-area bg_img seat-plan-banner"
-    data-background="assets/images/banner/banner04.jpg"
+    style={{ backgroundImage: `url(${banner4})` }}
   >
     <div className="container">
       <div className="details-banner-wrapper">
@@ -31,7 +35,7 @@ function MovieSeat() {
       <div className="page-title-area">
         <div className="item md-order-1">
           <a
-            href="movie-ticket-plan.html"
+            href="/movieticket"
             className="custom-button back-button"
           >
             <i className="flaticon-double-right-arrows-angles" />
@@ -61,7 +65,7 @@ function MovieSeat() {
       <div className="screen-area">
         <h4 className="screen">screen</h4>
         <div className="screen-thumb">
-          <img src="assets/images/movie/screen-thumb.png" alt="movie" />
+          <img src={screen} alt="movie" />
         </div>
         <h5 className="subtitle">silver plus</h5>
         <div className="screen-wrapper">
@@ -72,54 +76,54 @@ function MovieSeat() {
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
-                    </li>
-                  </ul>
-                </li>
-                <li className="front-seat">
-                  <ul>
-                    <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
-                    </li>
-                    <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
-                    </li>
-                    <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
-                    </li>
-                    <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
-                    </li>
-                    <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
-                    </li>
-                    <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                   </ul>
                 </li>
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
+                    </li>
+                    <li className="single-seat">
+                      <img src={seat1} alt="seat" />
+                    </li>
+                    <li className="single-seat">
+                      <img src={seat1} alt="seat" />
+                    </li>
+                  </ul>
+                </li>
+                <li className="front-seat">
+                  <ul>
+                    <li className="single-seat">
+                      <img src={seat1} alt="seat" />
+                    </li>
+                    <li className="single-seat">
+                      <img src={seat1} alt="seat" />
+                    </li>
+                    <li className="single-seat">
+                      <img src={seat1} alt="seat" />
+                    </li>
+                    <li className="single-seat">
+                      <img src={seat1} alt="seat" />
                     </li>
                   </ul>
                 </li>
@@ -132,46 +136,46 @@ function MovieSeat() {
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                   </ul>
                 </li>
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat seat-free">
                       <img
-                        src="assets/images/movie/seat01-free.png"
+                        src={seated1}
                         alt="seat"
                       />
                       <span className="sit-num">f7</span>
                     </li>
                     <li className="single-seat seat-free">
                       <img
-                        src="assets/images/movie/seat01-free.png"
+                        src={seated1}
                         alt="seat"
                       />
                       <span className="sit-num">f8</span>
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                   </ul>
                 </li>
@@ -179,27 +183,27 @@ function MovieSeat() {
                   <ul>
                     <li className="single-seat seat-free">
                       <img
-                        src="assets/images/movie/seat01-free.png"
+                        src={seated1}
                         alt="seat"
                       />
                       <span className="sit-num">f9</span>
                     </li>
                     <li className="single-seat seat-free">
                       <img
-                        src="assets/images/movie/seat01-free.png"
+                        src={seated1}
                         alt="seat"
                       />
                       <span className="sit-num">f10</span>
                     </li>
                     <li className="single-seat seat-free">
                       <img
-                        src="assets/images/movie/seat01-free.png"
+                        src={seated1}
                         alt="seat"
                       />
                       <span className="sit-num">f11</span>
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat01.png" alt="seat" />
+                      <img src={seat1} alt="seat" />
                     </li>
                   </ul>
                 </li>
@@ -217,33 +221,33 @@ function MovieSeat() {
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
-                    </li>
-                  </ul>
-                </li>
-                <li className="front-seat">
-                  <ul>
-                    <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
-                    </li>
-                    <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
-                    </li>
-                    <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
+                    </li>
+                    <li className="single-seat">
+                      <img src={seat2} alt="seat" />
+                    </li>
+                  </ul>
+                </li>
+                <li className="front-seat">
+                  <ul>
+                    <li className="single-seat">
+                      <img src={seat2} alt="seat" />
+                    </li>
+                    <li className="single-seat">
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
@@ -256,37 +260,37 @@ function MovieSeat() {
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-booked.png"
+                        src={seat2book}
                         alt="seat"
                       />
                       <span className="sit-num">D7 D8</span>
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
@@ -299,23 +303,23 @@ function MovieSeat() {
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
@@ -323,13 +327,13 @@ function MovieSeat() {
                   <ul>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-free.png"
+                        src={seated2}
                         alt="seat"
                       />
                       <span className="sit-num">f11 f12</span>
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
@@ -342,37 +346,37 @@ function MovieSeat() {
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-free.png"
+                        src={seated2}
                         alt="seat"
                       />
                       <span className="sit-num">b7 b8</span>
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
                 <li className="front-seat">
                   <ul>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                     <li className="single-seat">
-                      <img src="assets/images/movie/seat02.png" alt="seat" />
+                      <img src={seat2} alt="seat" />
                     </li>
                   </ul>
                 </li>
@@ -386,14 +390,14 @@ function MovieSeat() {
                   <ul>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-free.png"
+                        src={seated2}
                         alt="seat"
                       />
                       <span className="sit-num">a1 a2</span>
                     </li>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-free.png"
+                        src={seated2}
                         alt="seat"
                       />
                       <span className="sit-num">a3 a4</span>
@@ -404,21 +408,21 @@ function MovieSeat() {
                   <ul>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-free.png"
+                        src={seated2}
                         alt="seat"
                       />
                       <span className="sit-num">a5 a6</span>
                     </li>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-free.png"
+                        src={seated2}
                         alt="seat"
                       />
                       <span className="sit-num">a7 a8</span>
                     </li>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-free.png"
+                        src={seated2}
                         alt="seat"
                       />
                       <span className="sit-num">a9 a10</span>
@@ -429,14 +433,14 @@ function MovieSeat() {
                   <ul>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-free.png"
+                        src={seated2}
                         alt="seat"
                       />
                       <span className="sit-num">a11</span>
                     </li>
                     <li className="single-seat seat-free-two">
                       <img
-                        src="assets/images/movie/seat02-free.png"
+                        src={seated2}
                         alt="seat"
                       />
                       <span className="sit-num">a12</span>
@@ -451,7 +455,7 @@ function MovieSeat() {
       </div>
       <div
         className="proceed-book bg_img"
-        data-background="assets/images/movie/movie-bg-proceed.jpg"
+        style={{ backgroundImage: `url(${bannerproceed})` }}
       >
         <div className="proceed-to-book">
           <div className="book-item">
@@ -463,7 +467,7 @@ function MovieSeat() {
             <h3 className="title">$150</h3>
           </div>
           <div className="book-item">
-            <a href="movie-checkout.html" className="custom-button">
+            <a href="/moviefood" className="custom-button">
               proceed
             </a>
           </div>

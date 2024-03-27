@@ -1,4 +1,6 @@
-
+import banner4 from "~/assets/images/banner/banner04.jpg"
+import card from "~/assets/images/payment/card.png"
+import paypal from "~/assets/images/payment/paypal.png"
 
 
 
@@ -11,7 +13,7 @@ function MovieCheckout() {
   {/* ==========Banner-Section========== */}
   <section
     className="details-banner hero-area bg_img seat-plan-banner"
-    data-background="assets/images/banner/banner04.jpg"
+    style={{ backgroundImage: `url(${banner4})` }}
   >
     <div className="container">
       <div className="details-banner-wrapper">
@@ -32,7 +34,7 @@ function MovieCheckout() {
       <div className="page-title-area">
         <div className="item md-order-1">
           <a
-            href="movie-ticket-plan.html"
+            href="/moviefood"
             className="custom-button back-button"
           >
             <i className="flaticon-double-right-arrows-angles" />
@@ -112,19 +114,19 @@ function MovieCheckout() {
             <ul className="payment-option">
               <li className="active">
                 <a href="#0">
-                  <img src="assets/images/payment/card.png" alt="payment" />
+                  <img src={card} alt="payment" />
                   <span>Credit Card</span>
                 </a>
               </li>
               <li>
                 <a href="#0">
-                  <img src="assets/images/payment/card.png" alt="payment" />
+                  <img src={card} alt="payment" />
                   <span>Debit Card</span>
                 </a>
               </li>
               <li>
                 <a href="#0">
-                  <img src="assets/images/payment/paypal.png" alt="payment" />
+                  <img src={paypal} alt="payment" />
                   <span>paypal</span>
                 </a>
               </li>

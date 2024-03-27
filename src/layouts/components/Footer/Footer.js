@@ -1,3 +1,6 @@
+import bg01 from "~/assets/images/newslater/newslater-bg01.jpg"
+import logo from "~/assets/images/logo/logo.png"
+
 function Footer() {
     return ( 
       <footer className="footer-section">
@@ -5,7 +8,7 @@ function Footer() {
         <div className="container">
           <div
             className="newslater-container bg_img"
-            data-background="assets/images/newslater/newslater-bg01.jpg"
+            style={{ backgroundImage: `url(${bg01})` }}
           >
             <div className="newslater-wrapper">
               <h5 className="cate">subscribe to Boleto </h5>
@@ -23,7 +26,7 @@ function Footer() {
         <div className="footer-top">
           <div className="logo">
             <a href="index-1.html">
-              <img src="assets/images/footer/footer-logo.png" alt="footer" />
+              <img src={logo} alt="footer" />
             </a>
           </div>
           <ul className="social-icons">

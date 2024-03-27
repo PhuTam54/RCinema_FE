@@ -23,7 +23,7 @@ function Header() {
               </a>
               <ul className="submenu">
                 <li>
-                  <a href="#0" className="active">
+                  <a href="/" className="active">
                     Home One
                   </a>
                 </li>
