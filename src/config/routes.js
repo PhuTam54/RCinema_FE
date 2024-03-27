@@ -1,19 +1,14 @@
 const routes = {
     home: '/',
-    aboutus: '/aboutus',
-    cinema: '/cinema',
-    contactus: '/contactus',
-    dinning: '/dinning',
-    entertainment: '/entertainment',
-    gallery: '/gallery',
-    history: '/history',
-    ourteam: '/ourteam',
-    shopping: '/shopping',
-    singleteam: '/singleteam',
-    login: '/login',
-    signup: '/signup',
-    resetpass: '/resetpass',
-    
+    moviegird: '/moviegird',
+    movielist: '/movielist',
+    moviedetail1: '/moviedetail',
+    moviedetail2: '/moviedetail',
+    movieticket: '/movieticket',
+    movieseat: '/movieseat',
+    moviecheckout: '/moviecheckout',
+    moviefood: '/moviefood',
+
 };
 
 export default routes;
