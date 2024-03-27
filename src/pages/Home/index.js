@@ -5,6 +5,26 @@ import ticket3 from "~/assets/images/ticket/ticket-tab03.png"
 import city from "~/assets/images/ticket/city.png"
 import date from "~/assets/images/ticket/date.png"
 import cinema from "~/assets/images/ticket/cinema.png"
+import banner from "~/assets/images/banner/banner01.jpg"
+import bg1 from "~/assets/images/ticket/ticket-bg01.jpg"
+import side1 from "~/assets/images/sidebar/icons/sidebar01.png"
+import side2 from "~/assets/images/sidebar/icons/sidebar02.png"
+import side3 from "~/assets/images/sidebar/icons/sidebar03.png"
+import sidebanner1 from "~/assets/images/sidebar/banner/banner01.jpg"
+import sidebanner2 from "~/assets/images/sidebar/banner/banner02.jpg"
+import tomato from "~/assets/images/movie/tomato.png"
+import cake from "~/assets/images/movie/cake.png"
+import event1 from "~/assets/images/event/event01.jpg"
+import event2 from "~/assets/images/event/event02.jpg"
+import event3 from "~/assets/images/event/event03.jpg"
+import sport1 from "~/assets/images/sports/sports01.jpg"
+import sport2 from "~/assets/images/sports/sports02.jpg"
+import sport3 from "~/assets/images/sports/sports03.jpg"
+
+
+
+
+
 
 
 function Home() {
@@ -16,7 +36,7 @@ function Home() {
   <section className="banner-section">
     <div
       className="banner-bg bg_img bg-fixed"
-      data-background="assets/images/banner/banner01.jpg"
+      style={{ backgroundImage: `url(${banner})` }}
     />
     <div className="container">
       <div className="banner-content">
@@ -40,7 +60,7 @@ function Home() {
     <div className="container">
       <div
         className="search-tab bg_img"
-        data-background="assets/images/ticket/ticket-bg01.jpg"
+        style={{ backgroundImage: `url(${bg1})` }}
       >
         <div className="row align-items-center mb--20">
           <div className="col-lg-6 mb-20">
@@ -144,7 +164,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src="assets/images/ticket/city.png" alt="ticket" />
+                  <img src={city} alt="ticket" />
                 </div>
                 <span className="type">city</span>
                 <select className="select-bar">
@@ -159,7 +179,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src="assets/images/ticket/date.png" alt="ticket" />
+                  <img src={date} alt="ticket" />
                 </div>
                 <span className="type">date</span>
                 <select className="select-bar">
@@ -171,7 +191,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src="assets/images/ticket/cinema.png" alt="ticket" />
+                  <img src={cinema} alt="ticket" />
                 </div>
                 <span className="type">event</span>
                 <select className="select-bar">
@@ -196,7 +216,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src="assets/images/ticket/city.png" alt="ticket" />
+                  <img src={cinema} alt="ticket" />
                 </div>
                 <span className="type">city</span>
                 <select className="select-bar">
@@ -211,7 +231,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src="assets/images/ticket/date.png" alt="ticket" />
+                  <img src={date} alt="ticket" />
                 </div>
                 <span className="type">date</span>
                 <select className="select-bar">
@@ -223,7 +243,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src="assets/images/ticket/cinema.png" alt="ticket" />
+                  <img src={cinema} alt="ticket" />
                 </div>
                 <span className="type">sports</span>
                 <select className="select-bar">
@@ -255,7 +275,7 @@ function Home() {
                   <a href="#0">
                     <span className="img">
                       <img
-                        src="assets/images/sidebar/icons/sidebar01.png"
+                        src={side1}
                         alt="sidebar"
                       />
                     </span>
@@ -266,7 +286,7 @@ function Home() {
                   <a href="#0">
                     <span className="img">
                       <img
-                        src="assets/images/sidebar/icons/sidebar02.png"
+                        src={side2}
                         alt="sidebar"
                       />
                     </span>
@@ -277,7 +297,7 @@ function Home() {
                   <a href="#0">
                     <span className="img">
                       <img
-                        src="assets/images/sidebar/icons/sidebar03.png"
+                        src={side3}
                         alt="sidebar"
                       />
                     </span>
@@ -291,7 +311,7 @@ function Home() {
             <div className="widget-1-body">
               <a href="#0">
                 <img
-                  src="assets/images/sidebar/banner/banner01.jpg"
+                  src={sidebanner1}
                   alt="banner"
                 />
               </a>
@@ -332,7 +352,7 @@ function Home() {
             <div className="widget-1-body">
               <a href="#0">
                 <img
-                  src="assets/images/sidebar/banner/banner02.jpg"
+                  src={sidebanner2}
                   alt="banner"
                 />
               </a>
@@ -343,7 +363,7 @@ function Home() {
           <div className="article-section padding-bottom">
             <div className="section-header-1">
               <h2 className="title">movies</h2>
-              <a className="view-all" href="movie-grid.html">
+              <a className="view-all" href="/moviegrid">
                 View All
               </a>
             </div>
@@ -352,7 +372,7 @@ function Home() {
                 <div className="movie-grid">
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
-                      <img src="assets/images/movie/movie01.jpg" alt="movie" />
+                      <img src="" alt="movie" />
                     </a>
                   </div>
                   <div className="movie-content bg-one">
@@ -363,7 +383,7 @@ function Home() {
                       <li>
                         <div className="thumb">
                           <img
-                            src="assets/images/movie/tomato.png"
+                            src={tomato}
                             alt="movie"
                           />
                         </div>
@@ -371,7 +391,7 @@ function Home() {
                       </li>
                       <li>
                         <div className="thumb">
-                          <img src="assets/images/movie/cake.png" alt="movie" />
+                          <img src={cake} alt="movie" />
                         </div>
                         <span className="content">88%</span>
                       </li>
@@ -394,7 +414,7 @@ function Home() {
                       <li>
                         <div className="thumb">
                           <img
-                            src="assets/images/movie/tomato.png"
+                            src={tomato}
                             alt="movie"
                           />
                         </div>
@@ -402,7 +422,7 @@ function Home() {
                       </li>
                       <li>
                         <div className="thumb">
-                          <img src="assets/images/movie/cake.png" alt="movie" />
+                          <img src={cake} alt="movie" />
                         </div>
                         <span className="content">88%</span>
                       </li>
@@ -425,7 +445,7 @@ function Home() {
                       <li>
                         <div className="thumb">
                           <img
-                            src="assets/images/movie/tomato.png"
+                            src={tomato}
                             alt="movie"
                           />
                         </div>
@@ -433,7 +453,7 @@ function Home() {
                       </li>
                       <li>
                         <div className="thumb">
-                          <img src="assets/images/movie/cake.png" alt="movie" />
+                          <img src={cake} alt="movie" />
                         </div>
                         <span className="content">88%</span>
                       </li>
@@ -455,7 +475,7 @@ function Home() {
                 <div className="event-grid">
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
-                      <img src="assets/images/event/event01.jpg" alt="event" />
+                      <img src={event1} alt="event" />
                     </a>
                     <div className="event-date">
                       <h6 className="date-title">28</h6>
@@ -476,7 +496,7 @@ function Home() {
                 <div className="event-grid">
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
-                      <img src="assets/images/event/event02.jpg" alt="event" />
+                      <img src={event2} alt="event" />
                     </a>
                     <div className="event-date">
                       <h6 className="date-title">28</h6>
@@ -497,7 +517,7 @@ function Home() {
                 <div className="event-grid">
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
-                      <img src="assets/images/event/event03.jpg" alt="event" />
+                      <img src={event3} alt="event" />
                     </a>
                     <div className="event-date">
                       <h6 className="date-title">28</h6>
@@ -529,7 +549,7 @@ function Home() {
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
                       <img
-                        src="assets/images/sports/sports01.jpg"
+                        src={sport1}
                         alt="sports"
                       />
                     </a>
@@ -553,7 +573,7 @@ function Home() {
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
                       <img
-                        src="assets/images/sports/sports02.jpg"
+                        src={sport2}
                         alt="sports"
                       />
                     </a>
@@ -577,7 +597,7 @@ function Home() {
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
                       <img
-                        src="assets/images/sports/sports03.jpg"
+                        src={sport3}
                         alt="sports"
                       />
                     </a>
