@@ -8,6 +8,8 @@ const routes = {
     movieseat: '/movieseat',
     moviecheckout: '/moviecheckout',
     moviefood: '/moviefood',
+    signin: '/signin',
+    signup: '/signup'
 
 };
 
