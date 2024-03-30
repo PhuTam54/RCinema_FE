@@ -1,9 +1,48 @@
-import background from "~/assets/images/account/account-bg.jpg"
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import background from "~/assets/images/account/account-bg.jpg";
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
-    return (
-      <>
-      {/* ==========Sign-In-Section========== */}
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loadingAPI, setLoadingAPI] = useState(false);
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    let token  = localStorage.getItem("token");
+    if(token) {
+      navigate("/");
+    }
+  })
+
+
+  const handleLogin = async (e) => {
+    setLoadingAPI(true);
+    e.preventDefault();
+    try {
+      const response = await axios.post('https://localhost:7168/api/v1/LoginRegister/Login', {
+        email,
+        password
+      });
+      localStorage.setItem('token', response.data.token);
+      console.log('Login successful!', response.data.token);
+      navigate("/");
+      toast.success("Login successful!");
+    } catch (error) {
+      setError('Invalid email or password');
+      toast.error("Login error!!");
+      console.error('Login error:', error);
+    }
+    setLoadingAPI(false);
+  };
+
+  return (
+    
+    <>
       <section
         className="account-section bg_img"
         style={{ backgroundImage: `url(${background})` }}
@@ -15,7 +54,7 @@ function SignIn() {
                 <span className="cate">hello</span>
                 <h2 className="title">welcome back</h2>
               </div>
-              <form className="account-form">
+              <form className="account-form" onSubmit={handleLogin}>
                 <div className="form-group">
                   <label htmlFor="email2">
                     Email<span>*</span>
@@ -25,6 +64,8 @@ function SignIn() {
                     placeholder="Enter Your Email"
                     id="email2"
                     required=""
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
@@ -36,8 +77,11 @@ function SignIn() {
                     placeholder="Password"
                     id="pass3"
                     required=""
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
+                {error && <div style={{ color: 'red', marginBottom:10 }}>{error}</div>}
                 <div className="form-group checkgroup">
                   <input type="checkbox" id="bal2" required="" defaultChecked="" />
                   <label htmlFor="bal2">remember password</label>
@@ -46,11 +90,14 @@ function SignIn() {
                   </a>
                 </div>
                 <div className="form-group text-center">
-                  <input type="submit" defaultValue="log in" />
+                  <button type="submit" style={{color: "#032055"}}> 
+                  {loadingAPI && <i className="fa-solid fa-sync fa-spin"></i>}
+                   &nbsp; Login
+                  </button>
                 </div>
               </form>
               <div className="option">
-                Don't have an account? <a href="sign-up.html">sign up now</a>
+                Don't have an account? <a href="/signup">sign up now</a>
               </div>
               <div className="or">
                 <span>Or</span>
@@ -72,17 +119,13 @@ function SignIn() {
                   </a>
                 </li>
               </ul>
+            
             </div>
           </div>
         </div>
       </section>
-      {/* ==========Sign-In-Section========== */}
     </>
-    
-    
-
-
-      );
+  );
 }
 
-export default SignIn ;
+export default SignIn;

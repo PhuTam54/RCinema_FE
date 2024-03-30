@@ -4,22 +4,37 @@ import pop1 from "~/assets/images/movie/popcorn/pop1.png"
 import pop2 from "~/assets/images/movie/popcorn/pop2.png"
 import pop3 from "~/assets/images/movie/popcorn/pop3.png"
 import pop4 from "~/assets/images/movie/popcorn/pop4.png"
-
+import venus from "~/assets/images/movie/exhuma.jpg"
+import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 function MovieFood() {
     
-
+  const [movies, setMovies] = useState([]);
+  const { id } = useParams();
+  useEffect(() => {
+      axios
+          .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
+          .then((response) => {
+              setMovies(response.data);
+          })
+          .catch((error) => {
+              console.error('Error fetching data:', error);
+          });
+      }, [id]);
     return (
       <>
   {/* ==========Banner-Section========== */}
   <section
     className="details-banner hero-area bg_img seat-plan-banner"
-    style={{ backgroundImage: `url(${banner4})` }}
+    style={{ backgroundImage: `url(${venus})` }}
   >
     <div className="container">
       <div className="details-banner-wrapper">
         <div className="details-banner-content style-two">
-          <h3 className="title">Venus</h3>
+          <h3 className="title">{movies.title}</h3>
           <div className="tags">
             <a href="#0">City Walk</a>
             <a href="#0">English - 2D</a>
@@ -34,17 +49,21 @@ function MovieFood() {
     <div className="container">
       <div className="page-title-area">
         <div className="item md-order-1">
-          <a
+          {/* <a
             href="/movieseat"
             className="custom-button back-button"
           >
             <i className="flaticon-double-right-arrows-angles" />
             back
-          </a>
+          </a> */}
+            <Link  className="custom-button back-button" to={`/movieseat/${movies.id}`}> 
+            <i className="flaticon-double-right-arrows-angles" />
+            back
+            </Link>
         </div>
         <div className="item date-item">
           <span className="date">MON, SEP 09 2020</span>
-          <select className="select-bar">
+          <select className="select-bar" style={{backgroundColor: "#032055"}}>
             <option value="sc1">09:40</option>
             <option value="sc2">13:45</option>
             <option value="sc3">15:45</option>
@@ -225,7 +244,7 @@ function MovieFood() {
             <h4 className="title">booking summery</h4>
             <ul>
               <li>
-                <h6 className="subtitle">Venus</h6>
+                <h6 className="subtitle">{movies.title}</h6>
                 <span className="info">English-2d</span>
               </li>
               <li>
@@ -278,9 +297,12 @@ function MovieFood() {
               <span>Amount Payable</span>
               <span>$222</span>
             </h6>
-            <a href="/moviecheckout" className="custom-button back-button">
+            {/* <a href="/moviecheckout" className="custom-button back-button">
               proceed
-            </a>
+            </a> */}
+             <Link  className="custom-button back-button" to={`/moviecheckout/${movies.id}`}> 
+              proceed
+              </Link>
           </div>
           <div className="note">
             <h5 className="title">Note :</h5>

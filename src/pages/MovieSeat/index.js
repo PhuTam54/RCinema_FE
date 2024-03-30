@@ -6,20 +6,36 @@ import seat2 from "~/assets/images/movie/seat02.png"
 import seat2book from "~/assets/images/movie/seat02-booked.png"
 import seated2 from "~/assets/images/movie/seat02-free.png"
 import bannerproceed from "~/assets/images/movie/movie-bg-proceed.jpg"
+import venus from "~/assets/images/movie/exhuma.jpg"
+import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 function MovieSeat() {
     
-
+  const [movies, setMovies] = useState([]);
+  const { id } = useParams();
+  useEffect(() => {
+      axios
+          .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
+          .then((response) => {
+              setMovies(response.data);
+          })
+          .catch((error) => {
+              console.error('Error fetching data:', error);
+          });
+      }, [id]);
     return (
       <>
   {/* ==========Banner-Section========== */}
   <section
     className="details-banner hero-area bg_img seat-plan-banner"
-    style={{ backgroundImage: `url(${banner4})` }}
+    style={{ backgroundImage: `url(${venus})` }}
   >
     <div className="container">
       <div className="details-banner-wrapper">
         <div className="details-banner-content style-two">
-          <h3 className="title">Venus</h3>
+        <h3 className="title">{movies.title}</h3>
           <div className="tags">
             <a href="#0">City Walk</a>
             <a href="#0">English - 2D</a>
@@ -34,17 +50,21 @@ function MovieSeat() {
     <div className="container">
       <div className="page-title-area">
         <div className="item md-order-1">
-          <a
+          {/* <a
             href="/movieticket"
             className="custom-button back-button"
           >
             <i className="flaticon-double-right-arrows-angles" />
             back
-          </a>
+          </a> */}
+            <Link  className="custom-button back-button" to={`/movieticket/${movies.id}`}>
+               <i className="flaticon-double-right-arrows-angles" />
+                back
+            </Link>
         </div>
         <div className="item date-item">
           <span className="date">MON, SEP 09 2020</span>
-          <select className="select-bar">
+          <select className="select-bar" style={{backgroundColor: "#032055"}}>
             <option value="sc1">09:40</option>
             <option value="sc2">13:45</option>
             <option value="sc3">15:45</option>
@@ -467,9 +487,12 @@ function MovieSeat() {
             <h3 className="title">$150</h3>
           </div>
           <div className="book-item">
-            <a href="/moviefood" className="custom-button">
+            {/* <a href="/moviefood" className="custom-button">
               proceed
-            </a>
+            </a> */}
+              <Link  className="custom-button back-button" to={`/moviefood/${movies.id}`}>
+                 proceed
+              </Link>
           </div>
         </div>
       </div>

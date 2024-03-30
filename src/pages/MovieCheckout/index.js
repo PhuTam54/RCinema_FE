@@ -2,23 +2,39 @@ import banner4 from "~/assets/images/banner/banner04.jpg"
 import card from "~/assets/images/payment/card.png"
 import paypal from "~/assets/images/payment/paypal.png"
 
+import venus from "~/assets/images/movie/exhuma.jpg"
+import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 
 function MovieCheckout() {
     
-
+  const [movies, setMovies] = useState([]);
+  const { id } = useParams();
+  useEffect(() => {
+      axios
+          .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
+          .then((response) => {
+              setMovies(response.data);
+          })
+          .catch((error) => {
+              console.error('Error fetching data:', error);
+          });
+      }, [id]);
     return (
         
 <>
   {/* ==========Banner-Section========== */}
   <section
     className="details-banner hero-area bg_img seat-plan-banner"
-    style={{ backgroundImage: `url(${banner4})` }}
+    style={{ backgroundImage: `url(${venus})` }}
   >
     <div className="container">
       <div className="details-banner-wrapper">
         <div className="details-banner-content style-two">
-          <h3 className="title">Venus</h3>
+          <h3 className="title">{movies.title}</h3>
           <div className="tags">
             <a href="#0">City Walk</a>
             <a href="#0">English - 2D</a>
@@ -43,7 +59,7 @@ function MovieCheckout() {
         </div>
         <div className="item date-item">
           <span className="date">MON, SEP 09 2020</span>
-          <select className="select-bar">
+          <select className="select-bar" style={{backgroundColor: "#032055"}}>
             <option value="sc1">09:40</option>
             <option value="sc2">13:45</option>
             <option value="sc3">15:45</option>

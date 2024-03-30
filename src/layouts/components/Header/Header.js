@@ -2,11 +2,21 @@
 
 
 import logo from "~/assets/images/logo/logo.png"
-
-
-
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import React, { useState } from 'react';
 
 function Header() {
+  const [isLoggedIn] = useState(!!localStorage.getItem('token'));
+  const navigate = useNavigate();
+  const handleLogout = ()=> {
+    localStorage.removeItem("token");
+    navigate("/");
+    toast.success("Logout succsess!");
+    console.log("Log out succsess!");                                     
+   
+  
+  }
     return (
       <header className="header-section">
       <div className="container">
@@ -133,7 +143,22 @@ function Header() {
               <a href="contact.html">contact</a>
             </li>
             <li className="header-button pr-0">
-              <a href="sign-up.html">join us</a>
+              <a href="#0">join us</a>
+              <ul className="submenu">
+              {/* Check if user is logged in, if yes, display logout option */}
+              {isLoggedIn ? (
+                <li>
+                  <a href="#0" onClick={() => handleLogout()}>
+                    Log Out
+                  </a>
+                </li>
+              ) : (
+                // If user is not logged in, display login option
+                <li>
+                  <a href="/signin">Log In</a>
+                </li>
+              )}
+            </ul>
             </li>
           </ul>
           <div className="header-bar d-lg-none">

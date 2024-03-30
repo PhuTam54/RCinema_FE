@@ -1,4 +1,3 @@
-
 import ticket1 from "~/assets/images/ticket/ticket-tab01.png"
 import ticket2 from "~/assets/images/ticket/ticket-tab02.png"
 import ticket3 from "~/assets/images/ticket/ticket-tab03.png"
@@ -20,15 +19,22 @@ import event3 from "~/assets/images/event/event03.jpg"
 import sport1 from "~/assets/images/sports/sports01.jpg"
 import sport2 from "~/assets/images/sports/sports02.jpg"
 import sport3 from "~/assets/images/sports/sports03.jpg"
-
-
-
-
-
-
-
+import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 function Home() {
-    
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+      axios
+          .get(`https://localhost:7168/api/v1/Movies`)
+          .then((response) => {
+              setMovies(response.data);
+          })
+          .catch((error) => {
+              console.error('Error fetching data:', error);
+          });
+      }, []);
 
     return (
         <>
@@ -164,7 +170,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src={city} alt="ticket" />
+                  <img src="assets/images/ticket/city.png" alt="ticket" />
                 </div>
                 <span className="type">city</span>
                 <select className="select-bar">
@@ -179,7 +185,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src={date} alt="ticket" />
+                  <img src="assets/images/ticket/date.png" alt="ticket" />
                 </div>
                 <span className="type">date</span>
                 <select className="select-bar">
@@ -191,7 +197,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src={cinema} alt="ticket" />
+                  <img src="assets/images/ticket/cinema.png" alt="ticket" />
                 </div>
                 <span className="type">event</span>
                 <select className="select-bar">
@@ -216,7 +222,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src={cinema} alt="ticket" />
+                  <img src="assets/images/ticket/city.png" alt="ticket" />
                 </div>
                 <span className="type">city</span>
                 <select className="select-bar">
@@ -231,7 +237,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src={date} alt="ticket" />
+                  <img src="assets/images/ticket/date.png" alt="ticket" />
                 </div>
                 <span className="type">date</span>
                 <select className="select-bar">
@@ -243,7 +249,7 @@ function Home() {
               </div>
               <div className="form-group">
                 <div className="thumb">
-                  <img src={cinema} alt="ticket" />
+                  <img src="assets/images/ticket/cinema.png" alt="ticket" />
                 </div>
                 <span className="type">sports</span>
                 <select className="select-bar">
@@ -267,7 +273,7 @@ function Home() {
   <section className="movie-section padding-top padding-bottom bg-two">
     <div className="container">
       <div className="row flex-wrap-reverse justify-content-center">
-        <div className="col-lg-3 col-sm-10  mt-50 mt-lg-0">
+      <div className="col-lg-3 col-sm-10  mt-50 mt-lg-0">
           <div className="widget-1 widget-facility">
             <div className="widget-1-body">
               <ul>
@@ -363,105 +369,58 @@ function Home() {
           <div className="article-section padding-bottom">
             <div className="section-header-1">
               <h2 className="title">movies</h2>
-              <a className="view-all" href="/moviegrid">
+              <a className="view-all" href="movie-grid.html">
                 View All
               </a>
             </div>
-            <div className="row mb-30-none justify-content-center">
-              <div className="col-sm-6 col-lg-4">
-                <div className="movie-grid">
-                  <div className="movie-thumb c-thumb">
-                    <a href="#0">
-                      <img src="" alt="movie" />
+
+
+            {/* movie */}
+            <div className="row mb-10 justify-content-center">
+              {movies.map((movie, index) => (
+                <div key={index} className="col-sm-6 col-lg-4">
+                  <div className="movie-grid">
+                    <div className="movie-thumb c-thumb">
+                    <a key={movie.id}>
+                      <Link to={`/moviedetail/${movie.id}`}> 
+                        <img style={{ width: 260, height: 370 }} 
+                        src={movie.movie_Image} alt={movie.title} />
+                      </Link>
                     </a>
-                  </div>
-                  <div className="movie-content bg-one">
-                    <h5 className="title m-0">
-                      <a href="#0">alone</a>
-                    </h5>
-                    <ul className="movie-rating-percent">
-                      <li>
-                        <div className="thumb">
-                          <img
-                            src={tomato}
-                            alt="movie"
-                          />
-                        </div>
-                        <span className="content">88%</span>
-                      </li>
-                      <li>
-                        <div className="thumb">
-                          <img src={cake} alt="movie" />
-                        </div>
-                        <span className="content">88%</span>
-                      </li>
-                    </ul>
+                    </div>
+                    <div className="movie-content bg-one">
+                      <h5 className="title m-0">
+                        <Link to={`/moviedetail/${movie.id}`}>{movie.title}</Link>
+                      </h5>
+                      <ul className="movie-rating-percent">
+                        <li>
+                          <div className="thumb">
+                            <img
+                              src={tomato}
+                              alt="movie"
+                            />
+                          </div>
+                          <span className="content">88%</span>
+                        </li>
+                        <li>
+                          <div className="thumb">
+                            <img
+                              src={cake}
+                              alt="movie"
+                            />
+                          </div>
+                          <span className="content">88%</span>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-sm-6 col-lg-4">
-                <div className="movie-grid">
-                  <div className="movie-thumb c-thumb">
-                    <a href="#0">
-                      <img src="assets/images/movie/movie02.jpg" alt="movie" />
-                    </a>
-                  </div>
-                  <div className="movie-content bg-one">
-                    <h5 className="title m-0">
-                      <a href="#0">mars</a>
-                    </h5>
-                    <ul className="movie-rating-percent">
-                      <li>
-                        <div className="thumb">
-                          <img
-                            src={tomato}
-                            alt="movie"
-                          />
-                        </div>
-                        <span className="content">88%</span>
-                      </li>
-                      <li>
-                        <div className="thumb">
-                          <img src={cake} alt="movie" />
-                        </div>
-                        <span className="content">88%</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-6 col-lg-4">
-                <div className="movie-grid">
-                  <div className="movie-thumb c-thumb">
-                    <a href="#0">
-                      <img src="assets/images/movie/movie03.jpg" alt="movie" />
-                    </a>
-                  </div>
-                  <div className="movie-content bg-one">
-                    <h5 className="title m-0">
-                      <a href="#0">venus</a>
-                    </h5>
-                    <ul className="movie-rating-percent">
-                      <li>
-                        <div className="thumb">
-                          <img
-                            src={tomato}
-                            alt="movie"
-                          />
-                        </div>
-                        <span className="content">88%</span>
-                      </li>
-                      <li>
-                        <div className="thumb">
-                          <img src={cake} alt="movie" />
-                        </div>
-                        <span className="content">88%</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
+              ))}
+                      
+
+                      {/* end movie */}
+                    </div>
+            {/* end  */}
           </div>
           <div className="article-section padding-bottom">
             <div className="section-header-1">

@@ -2,12 +2,12 @@ const routes = {
     home: '/',
     moviegird: '/moviegird',
     movielist: '/movielist',
-    moviedetail1: '/moviedetail',
-    moviedetail2: '/moviedetail',
-    movieticket: '/movieticket',
-    movieseat: '/movieseat',
-    moviecheckout: '/moviecheckout',
-    moviefood: '/moviefood',
+    moviedetail1: '/moviedetail/:id',
+    moviedetail2: '/moviedetail/:id',
+    movieticket: '/movieticket/:id',
+    movieseat: '/movieseat/:id',
+    moviecheckout: '/moviecheckout/:id',
+    moviefood: '/moviefood/:id',
     signin: '/signin',
     signup: '/signup'
 
