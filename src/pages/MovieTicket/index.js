@@ -4,10 +4,27 @@ import cinema from "~/assets/images/ticket/cinema.png"
 import exp from "~/assets/images/ticket/exp.png"
 import sidebanner from "~/assets/images/sidebar/banner/banner03.jpg"
 import seatplan from "~/assets/images/movie/seat-plan.png"
-
+import venus from "~/assets/images/movie/exhuma.jpg"
+import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 function MovieTicket() {
     
-
+  const [movies, setMovies] = useState([]);
+  const { id } = useParams();
+  useEffect(() => {
+      axios
+          .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
+          .then((response) => {
+              setMovies(response.data);
+          })
+          .catch((error) => {
+              console.error('Error fetching data:', error);
+          });
+          
+      }, [id]);
+      
     return (
       <>
       {/* ==========Window-Warning-Section========== */}
@@ -19,22 +36,28 @@ function MovieTicket() {
           <div className="thumb">
             <img src={seatplan} alt="movie" />
           </div>
-          <a href="/movieseat" className="custom-button seatPlanButton">
+          {/* <a href="/movieseat" className="custom-button seatPlanButton">
             Seat Plans
             <i className="fas fa-angle-right" />
-          </a>
+          </a> */}
+            <Link  className="custom-button seatPlanButton" to={`/movieseat/${movies.id}`}> 
+            Seat Plans
+            <i className="fas fa-angle-right" />
+            </Link>
         </div>
       </section>
       {/* ==========Window-Warning-Section========== */}
       {/* ==========Banner-Section========== */}
+      
       <section
         className="details-banner hero-area bg_img"
-        data-background="assets/images/banner/banner03.jpg"
+        style={{ backgroundImage: `url(${venus})` }}
       >
+
         <div className="container">
           <div className="details-banner-wrapper">
             <div className="details-banner-content">
-              <h3 className="title">Venus</h3>
+              <h3 className="title">{movies.title}</h3>
               <div className="tags">
                 <a href="#0">English</a>
                 <a href="#0">Hindi</a>
@@ -55,7 +78,7 @@ function MovieTicket() {
                 <img src={city} alt="ticket" />
               </div>
               <span className="type">city</span>
-              <select className="select-bar">
+              <select className="select-bar" style={{backgroundColor: "#032055"}}>
                 <option value="london">London</option>
                 <option value="dhaka">dhaka</option>
                 <option value="rosario">rosario</option>
@@ -70,7 +93,7 @@ function MovieTicket() {
                 <img src={date} alt="ticket" />
               </div>
               <span className="type">date</span>
-              <select className="select-bar">
+              <select className="select-bar" style={{backgroundColor: "#032055"}}>
                 <option value="26-12-19">23/10/2020</option>
                 <option value="26-12-19">24/10/2020</option>
                 <option value="26-12-19">25/10/2020</option>
@@ -82,7 +105,7 @@ function MovieTicket() {
                 <img src={cinema} alt="ticket" />
               </div>
               <span className="type">cinema</span>
-              <select className="select-bar">
+              <select className="select-bar" style={{backgroundColor: "#032055"}}>
                 <option value="Awaken">Awaken</option>
                 <option value="Venus">Venus</option>
                 <option value="wanted">wanted</option>
@@ -97,7 +120,7 @@ function MovieTicket() {
                 <img src={exp} alt="ticket" />
               </div>
               <span className="type">Experience</span>
-              <select className="select-bar">
+              <select className="select-bar" style={{backgroundColor: "#032055"}}>
                 <option value="English-2D">English-2D</option>
                 <option value="English-3D">English-3D</option>
                 <option value="Hindi-2D">Hindi-2D</option>
