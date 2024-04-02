@@ -1,10 +1,19 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from '~/routes';
 import DefaultLayout from '~/layouts';
 import { ToastContainer } from 'react-toastify';
+import { UserContext } from './context/UserContext';
+import { useContext } from 'react';
 function App() {
+    const { user, loginContext } = useContext(UserContext);
+
+    useEffect(()=> {
+        if(localStorage.getItem("token")){
+            loginContext(localStorage.getItem("email"), localStorage.getItem("token"))
+        }
+    },[])
     return (
         <Router>
             <div className="App">
@@ -32,6 +41,7 @@ function App() {
                         );
                     })}
                 </Routes>
+           
             </div>
 
             <ToastContainer

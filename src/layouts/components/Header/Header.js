@@ -5,12 +5,15 @@ import logo from "~/assets/images/logo/logo.png"
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import React, { useState } from 'react';
+import { useContext } from "react";
+import { UserContext } from "~/context/UserContext";
 
 function Header() {
   const [isLoggedIn] = useState(!!localStorage.getItem('token'));
+  const { logout, user } = useContext(UserContext);
   const navigate = useNavigate();
   const handleLogout = ()=> {
-    localStorage.removeItem("token");
+   logout();
     navigate("/");
     toast.success("Logout succsess!");
     console.log("Log out succsess!");                                     
@@ -118,10 +121,10 @@ function Header() {
                   <a href="apps-download.html">Apps Download</a>
                 </li>
                 <li>
-                  <a href="sign-in.html">Sign In</a>
+                  <a href="/signin">Sign In</a>
                 </li>
                 <li>
-                  <a href="sign-up.html">Sign Up</a>
+                  <a href="/signup">Sign Up</a>
                 </li>
                 <li>
                   <a href="404.html">404</a>
@@ -143,7 +146,15 @@ function Header() {
               <a href="contact.html">contact</a>
             </li>
             <li className="header-button pr-0">
-              <a href="#0">join us</a>
+            <div className="container" style={{ textAlign: 'center' }}>
+                <a href="#0" style={{ margin: '0' }}>join us</a> 
+                <br />
+                {user && user.email && <span style={{ margin: '0' }}>
+                  {user.email.length > 8 ? user.email.slice(0, 8) + '...' : user.email}
+                  </span>}
+            </div>
+
+              
               <ul className="submenu">
               {/* Check if user is logged in, if yes, display logout option */}
               {isLoggedIn ? (
