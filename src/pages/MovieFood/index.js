@@ -14,6 +14,7 @@ function MovieFood() {
     
   const [movies, setMovies] = useState([]);
   const { id } = useParams();
+  const [foods, setFoods] = useState([]);
   useEffect(() => {
       axios
           .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
@@ -23,7 +24,16 @@ function MovieFood() {
           .catch((error) => {
               console.error('Error fetching data:', error);
           });
-      }, [id]);
+
+          axios
+          .get(`https://localhost:7168/api/v1/Foods`)
+          .then((response) => {
+            setFoods(response.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching food data:', error);
+          });
+      },[id]);
     return (
       <>
   {/* ==========Banner-Section========== */}
@@ -49,13 +59,6 @@ function MovieFood() {
     <div className="container">
       <div className="page-title-area">
         <div className="item md-order-1">
-          {/* <a
-            href="/movieseat"
-            className="custom-button back-button"
-          >
-            <i className="flaticon-double-right-arrows-angles" />
-            back
-          </a> */}
             <Link  className="custom-button back-button" to={`/movieseat/${movies.id}`}> 
             <i className="flaticon-double-right-arrows-angles" />
             back
@@ -105,13 +108,15 @@ function MovieFood() {
             </ul>
             <div className="grid-area">
               <div className="grid-item combos popcorn">
+              {foods.map((food) => (
                 <div className="grid-inner">
+                
                   <div className="grid-thumb">
                     <img
                       src={pop1}
                       alt="movie/popcorn"
                     />
-                    <div className="offer-tag">$57</div>
+                    <div className="offer-tag">${food.price}</div>
                     <div className="offer-remainder">
                       <h6 className="o-title mt-0">24%</h6>
                       <span>off</span>
@@ -119,15 +124,16 @@ function MovieFood() {
                   </div>
                   <div className="grid-content">
                     <h5 className="subtitle">
-                      <a href="#0">Muchaco, Crispy Taco, Bean Burrito</a>
+                      <a href="#0">{food.name}</a>
                     </h5>
                     <form className="cart-button">
                       <div className="cart-plus-minus">
                         <input
                           className="cart-plus-minus-box"
-                          type="text"
+                          type="number"
                           name="qtybutton"
-                          defaultValue={2}
+                          min={1}
+                          defaultValue={1}
                         />
                       </div>
                       <button type="submit" className="custom-button">
@@ -135,16 +141,19 @@ function MovieFood() {
                       </button>
                     </form>
                   </div>
+                
                 </div>
+                ))}
               </div>
               <div className="grid-item bevarage">
+              {foods.map((food) => (
                 <div className="grid-inner">
                   <div className="grid-thumb">
                     <img
                       src={pop2}
                       alt="movie/popcorn"
                     />
-                    <div className="offer-tag">$57</div>
+                    <div className="offer-tag">${food.price}</div>
                     <div className="offer-remainder">
                       <h6 className="o-title mt-0">24%</h6>
                       <span>off</span>
@@ -152,14 +161,15 @@ function MovieFood() {
                   </div>
                   <div className="grid-content">
                     <h5 className="subtitle">
-                      <a href="#0">Crispy Beef Taco, Beef Mucho Nachos</a>
+                      <a href="#0">{food.name}</a>
                     </h5>
                     <form className="cart-button">
                       <div className="cart-plus-minus">
                         <input
                           className="cart-plus-minus-box"
-                          type="text"
+                          type="number"
                           name="qtybutton"
+                          min={1}
                           defaultValue={2}
                         />
                       </div>
@@ -169,6 +179,7 @@ function MovieFood() {
                     </form>
                   </div>
                 </div>
+              ))}
               </div>
               <div className="grid-item combos">
                 <div className="grid-inner">

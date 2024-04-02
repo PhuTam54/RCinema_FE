@@ -579,7 +579,7 @@ function MovieGird() {
                           </div>
                         </div>
                       </div>
-                      <div className="movie-list">
+                      {/* <div className="movie-list">
                         <div className="movie-thumb c-thumb">
                           <a
                             href="movie-details.html"
@@ -1524,7 +1524,7 @@ function MovieGird() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

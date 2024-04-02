@@ -3,8 +3,11 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import background from "~/assets/images/account/account-bg.jpg";
 import { useNavigate } from 'react-router-dom';
+import { useContext } from "react";
+import { UserContext } from "~/context/UserContext";
 
 function SignIn() {
+  const { loginContext } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -28,7 +31,8 @@ function SignIn() {
         email,
         password
       });
-      localStorage.setItem('token', response.data.token);
+      loginContext(email,response.data.token);
+      // localStorage.setItem('token', response.data.token);
       console.log('Login successful!', response.data.token);
       navigate("/");
       toast.success("Login successful!");
