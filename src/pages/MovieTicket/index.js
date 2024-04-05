@@ -16,11 +16,13 @@ function MovieTicket() {
   const [shows, setShows] = useState([]);
   const { id } = useParams();
   const [selectedMovieId, setSelectedMovieId] = useState(null); // State để lưu id của phim được chọn
-  const [selectedRoomId, setSelectedRoomId] = useState(null); 
+  // const [selectedRoomId, setSelectedRoomId] = useState(null); 
+  const [selectedShowId, setSelectedShowId] = useState(null); 
   const [showModal, setShowModal] = useState(false);
 
-  const handleBookButtonClick = (roomId) => {
-    setSelectedRoomId(roomId);
+  const handleBookButtonClick = ( showId) => {
+    // setSelectedRoomId(roomId);
+    setSelectedShowId(showId);
     setShowModal(true);
   };
 
@@ -135,7 +137,7 @@ function MovieTicket() {
                       <div>English</div>
                     </div>
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                      <button onClick={() => handleBookButtonClick(show.room_Id)} className="custom-button" style={{marginLeft: 20}}>Book</button>
+                      <button onClick={() => handleBookButtonClick( show.id)} className="custom-button" style={{marginLeft: 20}}>Book</button>
                     </div>
                   </li>
                 ))}
@@ -162,7 +164,7 @@ function MovieTicket() {
             <div className="thumb">
               <img src={seatplan} alt="movie" />
             </div>
-            <Link style={{ maxWidth: 150, margin: "0 auto" }} className="custom-button" to={`/movieseat/${selectedMovieId}/room/${selectedRoomId}`}> 
+            <Link style={{ maxWidth: 150, margin: "0 auto" }} className="custom-button" to={`/movieseat/${selectedMovieId}/show/${selectedShowId}`}> 
               Seat Plans
               <i className="fas fa-angle-right" />
             </Link>
