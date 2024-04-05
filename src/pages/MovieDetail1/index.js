@@ -168,8 +168,8 @@ const MovieDetail1 = ({ match }) => {
                     </p>
                   </div>
                 </div>
-                {/* <Link className="custom-button" to={`/movieticket/${movie.id}`}>book tickets</Link> */}
-                <Link className="custom-button" to={`/movieticket/${movie.id}`} onClick={() => window.location.href = `/movieticket/${movie.id}`}>book tickets</Link>
+                <Link className="custom-button" to={`/movieticket/${movie.id}`}>book tickets</Link>
+                {/* <Link className="custom-button" to={`/movieticket/${movie.id}`} onClick={() => window.location.href = `/movieticket/${movie.id}`}>book tickets</Link> */}
 
 
               </div>

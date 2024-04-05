@@ -3125,3 +3125,65 @@ Copyright (c) 2013 Daniel Eden
     transition: none !important;
   }
 }
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(9, 28, 87, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  width: 560px; /* Đặt width của modal là 560px */
+  height: 420px; /* Đặt height của modal là 420px */
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto; /* Sử dụng overflow để cho phép scroll nếu nội dung vượt quá kích thước modal */
+  position: relative; /* Thêm position relative để thực hiện việc đặt position absolute cho nút đóng modal */
+}
+
+.close-button {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: black;
+  font-size: 20px;
+}
+
+.vanh{
+  color: #0a1e5e;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  grid-area:auto;
+line-height:23.4px;
+margin:35px 0px 12px;
+}
+.select_you_seats{
+  color: #31d7a9;
+  text-align: center;
+  font-family:Open Sans;
+  font-size:30px;
+  font-weight:600;
+  grid-area:auto;
+  text-transform: uppercase;
+}
+
+.thumb {
+  text-align: center;
+  margin: 30px 0;
+}
+

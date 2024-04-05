@@ -145,32 +145,43 @@ function Header() {
             <li>
               <a href="contact.html">contact</a>
             </li>
-            <li className="header-button pr-0">
-            <div className="container" style={{ textAlign: 'center' }}>
-                <a href="#0" style={{ margin: '0' }}>join us</a> 
-                <br />
-                {user && user.email && <span style={{ margin: '0' }}>
-                  {user.email.length > 8 ? user.email.slice(0, 8) + '...' : user.email}
-                  </span>}
-            </div>
 
-              
-              <ul className="submenu">
-              {/* Check if user is logged in, if yes, display logout option */}
-              {isLoggedIn ? (
-                <li>
-                  <a href="#0" onClick={() => handleLogout()}>
-                    Log Out
-                  </a>
-                </li>
-              ) : (
-                // If user is not logged in, display login option
-                <li>
-                  <a href="/signin">Log In</a>
-                </li>
-              )}
-            </ul>
-            </li>
+
+           <li className="header-button pr-0">
+  <div className="container" style={{ textAlign: 'center' }}>
+    {/* Hiển thị biểu tượng người dùng nếu đã đăng nhập */}
+    {isLoggedIn ? (
+      <a href="#0" style={{ margin: '0' }}>
+        <i className="fa fa-user"></i> {/* Thay biểu tượng này bằng biểu tượng người dùng của bạn */}
+      </a>
+    ) : (
+      // Hiển thị "Join Us" nếu chưa đăng nhập
+      <a href="#0" style={{ margin: '0' }}>Join Us</a>
+    )}
+    <br />
+  </div>
+  <ul className="submenu">
+    {/* Check if user is logged in, if yes, display logout option */}
+    {isLoggedIn ? (
+      <li>
+        <a href="#0" onClick={() => handleLogout()}>Log Out</a>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {user && user.email && (
+            <span style={{ margin: '0', color: 'black' }}>
+              {user.email}
+            </span>
+          )}
+        </div>
+      </li>
+    ) : (
+      // If user is not logged in, display login option
+      <li>
+        <a href="/signin">Log In</a>
+      </li>
+    )}
+  </ul>
+</li>
+
           </ul>
           <div className="header-bar d-lg-none">
             <span />
