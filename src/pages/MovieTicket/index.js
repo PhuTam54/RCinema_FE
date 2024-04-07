@@ -36,7 +36,7 @@ function MovieTicket() {
         console.error('Error fetching data:', error);
       });
 
-    axios.get(`https://localhost:7168/api/v1/Shows`)
+    axios.get(`https://localhost:7168/api/v1/Shows/movieId?movieId=${id}`)
       .then((response) => {
         setShows(response.data);
       })

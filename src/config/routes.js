@@ -6,8 +6,8 @@ const routes = {
     moviedetail2: '/moviedetail/:id',
     movieticket: '/movieticket/:id',
     movieseat: '/movieseat/:id/show/:showId',
-    moviecheckout: '/moviecheckout/:id',
-    moviefood: '/moviefood/:id',
+    moviecheckout: '/moviecheckout/:id/show/:showId',
+    moviefood: '/moviefood/:id/show/:showId',
     signin: '/signin',
     signup: '/signup'
 

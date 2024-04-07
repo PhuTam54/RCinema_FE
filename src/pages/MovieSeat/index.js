@@ -463,7 +463,7 @@ function MovieSeat() {
 
   const proceedToBook = () => {
     // Truyền thông tin ghế đã chọn và tổng tiền sang trang mới
-    window.location.href = `/moviefood/${movies.id}?seats=${selectedSeats.join(',')}&totalPrice=${totalPrice}`;
+    window.location.href = `/moviefood/${movies.id}/show/${showId}?seats=${selectedSeats.join(',')}&totalPrice=${totalPrice}`;
   };
 
   return (
