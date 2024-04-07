@@ -20,6 +20,7 @@ const UserProvider = ({ children }) => {
       email: '',
       auth: false,
     }));
+    window.location.reload();
   };
 
   return (

@@ -25,39 +25,12 @@ function MovieCheckout() {
             });
     }, [id]);
 
-    const getTokenData = () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        const tokenData = token.split('.')[1];
-        const decodedToken = atob(tokenData);
-        const tokenObject = JSON.parse(decodedToken);
-        console.log(tokenObject);
-        return tokenObject;
-      }
-      return null;
-    };
-
-    // let userId = getTokenData().userid; // Token chưa có userId, nếu cần thì để truyền vào.
-    let userId = 2;
-    let showId = 35;
-
-    let orderData = {
-        'order_Code': 'ThisIsACode',
-        'total': 120,
-        'discount_Amount': 1,
-        'discount_Code': 'thisIsADiscountCode',
-        'final_Total': 119,
-        'payment_Method': 'vnpay',
-        'qR_Code': 'thisIsAQRCode'
-    };
-
     const handleCheckout = () => {
         orderService
-            .createOrder(orderData, userId, showId)
+            .createOrder() // Payment...
             .then((response) => {
-                console.log(response);
-                toast.success('Order has been created');
-            })
+                        toast.success('Order has been created');
+                    })
             .catch((error) => {
                 toast.error('Failed to create order', error);
             });
