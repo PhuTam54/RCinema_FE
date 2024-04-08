@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { location, useLocation } from 'react-router-dom';
 
 import venus from '~/assets/images/movie/exhuma.jpg';
 import banner4 from '~/assets/images/banner/banner04.jpg';
@@ -12,8 +13,14 @@ import paypal from '~/assets/images/payment/paypal.png';
 import * as orderService from '~/services/orderService';
 
 function MovieCheckout() {
+    const location = useLocation();
+
     const [movies, setMovies] = useState([]);
+    const [order, setOrder] = useState({});
     const { id } = useParams();
+    const params = new URLSearchParams(location.search);
+    const orderCode = params.get('orderCode');
+
     useEffect(() => {
         axios
             .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
@@ -23,14 +30,33 @@ function MovieCheckout() {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
+
+        orderService
+            .getOrder(orderCode)
+            .then((response) => {
+                setOrder(response);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
     }, [id]);
 
+    const paymentData = {
+        orderType: 'Sandbox',
+        amount: 1,
+        orderDescription: 'Order movie ticket',
+        name: 'Customer',
+    };
+
     const handleCheckout = () => {
-        orderService
-            .createOrder() // Payment...
+        paymentData.amount = order.final_Total * 23000;
+        console.log(paymentData);
+        axios
+            .post(`https://localhost:7168/api/Payments/PayPal`, paymentData)
             .then((response) => {
-                        toast.success('Order has been created');
-                    })
+                window.location.href = response.data;
+                toast.success('Go to paypal');
+            })
             .catch((error) => {
                 toast.error('Failed to create order', error);
             });

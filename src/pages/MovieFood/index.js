@@ -30,10 +30,10 @@ function MovieFood() {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const seats = params.get('seats');
-        const totalPrice = params.get('totalPrice');
+        // const totalPrice = params.get('totalPrice');
 
         setSelectedSeats(seats.split(','));
-        setTotalPrice(parseInt(totalPrice));
+        // setTotalPrice(parseInt(totalPrice));
     }, [location.search]);
 
     useEffect(() => {
@@ -80,21 +80,27 @@ function MovieFood() {
             });
     }, [showId, selectedSeats]);
     // Get the roomId after it has been set above and call the API to fetch the seats in that room
+    // console.log(mySeats)
+    // console.log(totalPrice)
     useEffect(() => {
         axios
-          .get(`https://localhost:7168/api/v1/Seats`)
-          .then((response) => {
-            selectedSeats.map((seat) => {
-              if (seat && !mySeats.some((mySeat) => String(mySeat.id) === seat)) {
-                const seatData = response.data.find((data) => String(data.id) === seat);
-                setMySeats((prevSeats) => [...prevSeats, seatData]);
-              }
-              return null; // Add a return statement to the map function
+            .get(`https://localhost:7168/api/v1/Seats`)
+            .then((response) => {
+                selectedSeats.map((seat) => {
+                    // console.log(seat)
+                    // console.log(mySeats)
+                    if (seat && !mySeats.some((mySeat) => String(mySeat.id) === seat)) {
+                        const seatData = response.data.find((data) => String(data.id) === seat);
+                        setMySeats((prevSeats) => [...prevSeats, seatData]);
+                        // Lỗi khi bị re render sẽ lại cộng thêm giá trị vào totalPrice
+                        setTotalPrice((prevPrice) => prevPrice + seatData.seatType.seatPricings[0].price);
+                    }
+                    return null; // Add a return statement to the map function
+                });
+            })
+            .catch((error) => {
+                console.error('Error fetching seats data:', error);
             });
-          })
-          .catch((error) => {
-            console.error('Error fetching seats data:', error);
-          });
     }, [selectedSeats, roomId]);
 
     const addToBill = (food, qty) => {
@@ -129,10 +135,9 @@ function MovieFood() {
 
     const orderData = {
         order_Code: `ThisIsACodeUnique_${Date.now()}_${Math.random()}`,
-        total: totalPrice + bill.reduce((acc, curr) => acc + curr.price * curr.qty, 0),
+        total: 0,
         discount_Amount: 1,
         discount_Code: 'thisIsADiscountCode',
-        final_Total: totalPrice + bill.reduce((acc, curr) => acc + curr.price * curr.qty, 0) - 1,
         payment_Method: '',
     };
 
@@ -140,7 +145,7 @@ function MovieFood() {
 
     const orderTicketData = {
         code: `ThisIsATicketCodeUnique_${Date.now()}_${Math.random()}`,
-        price: 10, // Call API seatPrice
+        price: 0, // Call API seatPrice
         is_Used: false,
     };
 
@@ -150,6 +155,16 @@ function MovieFood() {
     };
 
     const handleCheckout = () => {
+        const usedSeatIds = [];
+        mySeats.forEach((seat) => {
+            if (!usedSeatIds.includes(seat.id)) {
+                usedSeatIds.push(seat.id);
+                orderData.total += seat.seatType.seatPricings[0].price;
+                orderData.total += bill.reduce((acc, curr) => acc + curr.price * curr.qty, 0);
+            }
+        });
+        orderData.final_Total = orderData.total - orderData.discount_Amount;
+        console.log(orderData);
         orderService
             .createOrder(orderData, userId, showId)
             .then((response) => {
@@ -157,15 +172,16 @@ function MovieFood() {
                     .getOrder(response.order_Code)
                     .then((orderResponse) => {
                         const orderId = orderResponse.id;
-                        
+
                         const usedSeatIds = [];
                         mySeats.forEach((seat) => {
-                          if (!usedSeatIds.includes(seat.id)) {
-                            usedSeatIds.push(seat.id);
-                            orderService.createOrderTicket(orderTicketData, orderId, seat.id).catch((error) => {
-                              toast.error('Failed to create order ticket', error);
-                            });
-                          }
+                            if (!usedSeatIds.includes(seat.id)) {
+                                usedSeatIds.push(seat.id);
+                                orderTicketData.price = seat.seatType.seatPricings[0].price;
+                                orderService.createOrderTicket(orderTicketData, orderId, seat.id).catch((error) => {
+                                    toast.error('Failed to create order ticket', error);
+                                });
+                            }
                         });
                         bill.forEach((food) => {
                             orderFoodData.qty = food.qty;
@@ -358,7 +374,7 @@ function MovieFood() {
                                 <Link
                                     onClick={handleCheckout}
                                     className="custom-button"
-                                    to={`/moviecheckout/${movies.id}/show/${showId}`}
+                                    to={`/moviecheckout/${movies.id}/show/${showId}?orderCode=${orderData.order_Code}`}
                                 >
                                     Seat Plans
                                     <i className="fas fa-angle-right" />
