@@ -13,6 +13,8 @@ import MovieGird from '~/pages/MovieGird';
 import MovieList from '~/pages/MovieList';
 import MovieSeat from '~/pages/MovieSeat';
 import MovieTicket from '~/pages/MovieTicket';
+import ShopDetail from '~/pages/ShopDetail';
+import Shops from '~/pages/Shops';
 import SignIn from '~/pages/SignIn';
 import SignUp from '~/pages/SignUp';
 
@@ -31,6 +33,8 @@ export const publicRoutes = [
     { path: config.routes.movieseat, component: MovieSeat },
     { path: config.routes.moviecheckout, component: MovieCheckout },
     { path: config.routes.moviefood, component: MovieFood },
+    { path: config.routes.shops, component: Shops },
+    { path: config.routes.shopdetail, component: ShopDetail },
     { path: config.routes.signin, component: SignIn, layout: LayoutOnly },
     { path: config.routes.signup, component: SignUp, layout: LayoutOnly },
 
