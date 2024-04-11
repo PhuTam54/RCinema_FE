@@ -17,6 +17,8 @@ import ShopDetail from '~/pages/ShopDetail';
 import Shops from '~/pages/Shops';
 import SignIn from '~/pages/SignIn';
 import SignUp from '~/pages/SignUp';
+import MyOrder from '~/pages/MyOrder';
+import Thanks from '~/pages/Thanks';
 
 
 
@@ -37,6 +39,8 @@ export const publicRoutes = [
     { path: config.routes.shopdetail, component: ShopDetail },
     { path: config.routes.signin, component: SignIn, layout: LayoutOnly },
     { path: config.routes.signup, component: SignUp, layout: LayoutOnly },
+    { path: config.routes.myorder, component: MyOrder },
+    { path: config.routes.thanks, component: Thanks },
 
 
 ];

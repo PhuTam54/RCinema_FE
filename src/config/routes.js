@@ -10,8 +10,13 @@ const routes = {
     moviefood: '/moviefood/:id/show/:showId',
     signin: '/signin',
     signup: '/signup',
+
     shops: '/shops',
     shopdetail: '/shopdetail',
+
+    myorder: '/myorder',
+    thanks: '/thanks',
+
 
 };
 
