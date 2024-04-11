@@ -24,7 +24,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 function Home() {
   const [movies, setMovies] = useState([]);
-
+  const [search, setSearch] = useState('');
   useEffect(() => {
       axios
           .get(`https://localhost:7168/api/v1/Movies`)
@@ -35,6 +35,9 @@ function Home() {
               console.error('Error fetching data:', error);
           });
       }, []);
+      const filteredMovies = movies.filter(movie =>
+        movie.title.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
         <>
@@ -111,7 +114,8 @@ function Home() {
           <div className="tab-item active">
             <form className="ticket-search-form">
               <div className="form-group large">
-                <input type="text" placeholder="Search for Movies" />
+                <input type="text"  value={search}
+                onChange={e => setSearch(e.target.value)} placeholder="Search for Movies" />
                 <button type="submit">
                   <i className="fas fa-search" />
                 </button>
@@ -377,7 +381,7 @@ function Home() {
 
             {/* movie */}
             <div className="row mb-10 justify-content-center">
-              {movies.map((movie, index) => (
+              {filteredMovies.map((movie, index) => (
                 <div key={index} className="col-sm-6 col-lg-4">
                   <div className="movie-grid">
                     <div className="movie-thumb c-thumb">
