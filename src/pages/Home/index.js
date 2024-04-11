@@ -4,7 +4,7 @@ import ticket3 from "~/assets/images/ticket/ticket-tab03.png"
 import city from "~/assets/images/ticket/city.png"
 import date from "~/assets/images/ticket/date.png"
 import cinema from "~/assets/images/ticket/cinema.png"
-import banner from "~/assets/images/banner/banner01.jpg"
+import banner from "~/assets/images/banner/rmall.jpg"
 import bg1 from "~/assets/images/ticket/ticket-bg01.jpg"
 import side1 from "~/assets/images/sidebar/icons/sidebar01.png"
 import side2 from "~/assets/images/sidebar/icons/sidebar02.png"
@@ -16,15 +16,15 @@ import cake from "~/assets/images/movie/cake.png"
 import event1 from "~/assets/images/event/event01.jpg"
 import event2 from "~/assets/images/event/event02.jpg"
 import event3 from "~/assets/images/event/event03.jpg"
-import sport1 from "~/assets/images/sports/sports01.jpg"
-import sport2 from "~/assets/images/sports/sports02.jpg"
-import sport3 from "~/assets/images/sports/sports03.jpg"
+import shop1 from "~/assets/images/shop/shop1.png"
+import shop2 from "~/assets/images/shop/shop2.png"
+import shop3 from "~/assets/images/shop/shop3.png"
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 function Home() {
   const [movies, setMovies] = useState([]);
-
+  const [search, setSearch] = useState('');
   useEffect(() => {
       axios
           .get(`https://localhost:7168/api/v1/Movies`)
@@ -35,6 +35,9 @@ function Home() {
               console.error('Error fetching data:', error);
           });
       }, []);
+      const filteredMovies = movies.filter(movie =>
+        movie.title.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
         <>
@@ -111,7 +114,8 @@ function Home() {
           <div className="tab-item active">
             <form className="ticket-search-form">
               <div className="form-group large">
-                <input type="text" placeholder="Search for Movies" />
+                <input type="text"  value={search}
+                onChange={e => setSearch(e.target.value)} placeholder="Search for Movies" />
                 <button type="submit">
                   <i className="fas fa-search" />
                 </button>
@@ -377,7 +381,7 @@ function Home() {
 
             {/* movie */}
             <div className="row mb-10 justify-content-center">
-              {movies.map((movie, index) => (
+              {filteredMovies.map((movie, index) => (
                 <div key={index} className="col-sm-6 col-lg-4">
                   <div className="movie-grid">
                     <div className="movie-thumb c-thumb">
@@ -497,8 +501,8 @@ function Home() {
           </div>
           <div className="article-section">
             <div className="section-header-1">
-              <h2 className="title">sports</h2>
-              <a className="view-all" href="sports.html">
+              <h2 className="title">shops</h2>
+              <a className="view-all" href="/shops">
                 View All
               </a>
             </div>
@@ -508,18 +512,15 @@ function Home() {
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
                       <img
-                        src={sport1}
+                        src={shop1}
                         alt="sports"
                       />
                     </a>
-                    <div className="event-date">
-                      <h6 className="date-title">28</h6>
-                      <span>Dec</span>
-                    </div>
+                    
                   </div>
                   <div className="movie-content bg-one">
                     <h5 className="title m-0">
-                      <a href="#0">football league tournament</a>
+                      <a href="/shopdetail">alone</a>
                     </h5>
                     <div className="movie-rating-percent">
                       <span>327 Montague Street</span>
@@ -532,14 +533,11 @@ function Home() {
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
                       <img
-                        src={sport2}
+                        src={shop2}
                         alt="sports"
                       />
                     </a>
-                    <div className="event-date">
-                      <h6 className="date-title">28</h6>
-                      <span>Dec</span>
-                    </div>
+                    
                   </div>
                   <div className="movie-content bg-one">
                     <h5 className="title m-0">
@@ -556,14 +554,11 @@ function Home() {
                   <div className="movie-thumb c-thumb">
                     <a href="#0">
                       <img
-                        src={sport3}
+                        src={shop3}
                         alt="sports"
                       />
                     </a>
-                    <div className="event-date">
-                      <h6 className="date-title">28</h6>
-                      <span>Dec</span>
-                    </div>
+                    
                   </div>
                   <div className="movie-content bg-one">
                     <h5 className="title m-0">

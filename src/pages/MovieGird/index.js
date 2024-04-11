@@ -493,25 +493,26 @@ function MovieGird() {
                   </div>
                   <div className="tab-item">
                     <div className="movie-area mb-10">
+                      {movies.map((movie, index) => (
                       <div className="movie-list">
                         <div className="movie-thumb c-thumb">
                           <a
                             href="movie-details.html"
                             className="w-100 bg_img h-100"
-                            style={{ backgroundImage: `url(${movie1})` }}
+                            style={{ backgroundImage: `url(${movie.movie_Image})` }}
                           >
                             <img
                               className="d-sm-none"
-                              src={movie1}
+                              src={movie.movie_Image}
                               alt="movie"
                             />
                           </a>
                         </div>
                         <div className="movie-content bg-one">
                           <h5 className="title">
-                            <a href="movie-details.html">alone</a>
+                            <a href="movie-details.html">{movie.title}</a>
                           </h5>
-                          <p className="duration">2hrs 50 min</p>
+                          <p className="duration">{movie.duration}</p>
                           <div className="movie-tags">
                             <a href="#0">action</a>
                             <a href="#0">adventure</a>
@@ -579,6 +580,7 @@ function MovieGird() {
                           </div>
                         </div>
                       </div>
+                      ))}
                       {/* <div className="movie-list">
                         <div className="movie-thumb c-thumb">
                           <a

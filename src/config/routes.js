@@ -9,7 +9,14 @@ const routes = {
     moviecheckout: '/moviecheckout/:id/show/:showId',
     moviefood: '/moviefood/:id/show/:showId',
     signin: '/signin',
-    signup: '/signup'
+    signup: '/signup',
+
+    shops: '/shops',
+    shopdetail: '/shopdetail',
+
+    myorder: '/myorder',
+    thanks: '/thanks',
+
 
 };
 
