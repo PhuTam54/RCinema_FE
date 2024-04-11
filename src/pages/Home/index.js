@@ -384,7 +384,7 @@ function Home() {
                     <a key={movie.id}>
                       <Link to={`/moviedetail/${movie.id}`}> 
                         <img style={{ width: 260, height: 370 }} 
-                        src={movie.movie_Image} alt={movie.title} />
+                        src={movie.movie_Image.includes('/') ? movie.movie_Image : 'Cinema/pixner.net/boleto/demo/assets/images/movie/exhuma.jpg'} alt={movie.title} />
                       </Link>
                     </a>
                     </div>

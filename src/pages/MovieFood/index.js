@@ -15,12 +15,14 @@ import * as orderService from '~/services/orderService';
 import { UserContext } from '~/context/UserContext';
 
 function MovieFood() {
-    const [movies, setMovies] = useState([]);
+    const showData = JSON.parse(localStorage.getItem('show'));
+    const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats'));
+    const movie = JSON.parse(localStorage.getItem('movie')) ?? {};
+
     const [mySeats, setMySeats] = useState([]);
     const { id, showId } = useParams();
     const [foods, setFoods] = useState([]);
     const location = useLocation();
-    const [selectedSeats, setSelectedSeats] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [startTime, setStartTime] = useState('');
     const [startDate, setStartDate] = useState('');
@@ -28,26 +30,7 @@ function MovieFood() {
     const [bill, setBill] = useState([]);
 
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const seats = params.get('seats');
-        // const totalPrice = params.get('totalPrice');
 
-        setSelectedSeats(seats.split(','));
-        // setTotalPrice(parseInt(totalPrice));
-    }, [location.search]);
-
-    useEffect(() => {
-        axios
-            .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
-            .then((response) => {
-                setMovies(response.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
-    }, [id]);
-
-    useEffect(() => {
         axios
             .get(`https://localhost:7168/api/v1/Foods`)
             .then((response) => {
@@ -56,33 +39,23 @@ function MovieFood() {
             .catch((error) => {
                 console.error('Error fetching food data:', error);
             });
-    }, []);
 
-    useEffect(() => {
-        axios
-            .get(`https://localhost:7168/api/v1/Shows/id?id=${showId}`)
-            .then((response) => {
-                const { room_Id, start_Date } = response.data;
-                setRoomId(room_Id);
+        const { room_Id, start_Date } = showData;
+        setRoomId(room_Id);
 
-                const startDateParts = start_Date.split('T');
-                const date = startDateParts[0];
-                const timeParts = startDateParts[1].split(':');
-                const hours = timeParts[0];
-                const minutes = timeParts[1];
-                const formattedStartTime = `${hours}:${minutes}`;
+        const startDateParts = start_Date.split('T');
+        const date = startDateParts[0];
+        const timeParts = startDateParts[1].split(':');
+        const hours = timeParts[0];
+        const minutes = timeParts[1];
+        const formattedStartTime = `${hours}:${minutes}`;
 
-                setStartTime(formattedStartTime);
-                setStartDate(date);
-            })
-            .catch((error) => {
-                console.error('Error fetching show data:', error);
-            });
-    }, [showId, selectedSeats]);
-    // Get the roomId after it has been set above and call the API to fetch the seats in that room
-    // console.log(mySeats)
-    // console.log(totalPrice)
-    useEffect(() => {
+        setStartTime(formattedStartTime);
+        setStartDate(date);
+        // Get the roomId after it has been set above and call the API to fetch the seats in that room
+        // console.log(mySeats)
+        // console.log(totalPrice)
+
         axios
             .get(`https://localhost:7168/api/v1/Seats`)
             .then((response) => {
@@ -101,7 +74,7 @@ function MovieFood() {
             .catch((error) => {
                 console.error('Error fetching seats data:', error);
             });
-    }, [selectedSeats, roomId]);
+    }, []);
 
     const addToBill = (food, qty) => {
         const existingItemIndex = bill.findIndex((item) => item.name === food.name);
@@ -142,6 +115,7 @@ function MovieFood() {
     };
 
     orderData.qR_Code = orderData.order_Code;
+    localStorage.setItem('orderCode', orderData.order_Code);
 
     const orderTicketData = {
         code: `ThisIsATicketCodeUnique_${Date.now()}_${Math.random()}`,
@@ -166,7 +140,7 @@ function MovieFood() {
         orderData.final_Total = orderData.total - orderData.discount_Amount;
         console.log(orderData);
         orderService
-            .createOrder(orderData, userId, showId)
+            .createOrder(orderData, userId, showData.id)
             .then((response) => {
                 orderService
                     .getOrder(response.order_Code)
@@ -209,7 +183,7 @@ function MovieFood() {
                 <div className="container">
                     <div className="details-banner-wrapper">
                         <div className="details-banner-content style-two">
-                            <h3 className="title">{movies.title}</h3>
+                            <h3 className="title">{movie.title}</h3>
                             <div className="tags">
                                 <a href="#0">City Walk</a>
                                 <a href="#0">English - 2D</a>
@@ -304,7 +278,7 @@ function MovieFood() {
                                 <h4 className="title">Booking Summary</h4>
                                 <ul>
                                     <li>
-                                        <h6 className="subtitle">{movies.title}</h6>
+                                        <h6 className="subtitle">{movie.title}</h6>
                                         <span className="info">English-2d</span>
                                     </li>
                                     <li>
@@ -374,7 +348,7 @@ function MovieFood() {
                                 <Link
                                     onClick={handleCheckout}
                                     className="custom-button"
-                                    to={`/moviecheckout/${movies.id}/show/${showId}?orderCode=${orderData.order_Code}`}
+                                    to={`/moviecheckout/${movie.id}/show/${showData.id}?orderCode=${orderData.order_Code}`}
                                 >
                                     Seat Plans
                                     <i className="fas fa-angle-right" />

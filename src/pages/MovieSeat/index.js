@@ -10,7 +10,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 function MovieSeat() {
-    const [movies, setMovies] = useState([]);
+    const movies = JSON.parse(localStorage.getItem('movie')) ?? {};
+
     const [seats, setSeats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -21,16 +22,9 @@ function MovieSeat() {
 
     useEffect(() => {
         axios
-            .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
-            .then((response) => {
-                setMovies(response.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching movie data:', error);
-            });
-        axios
             .get(`https://localhost:7168/api/v1/Shows/id?id=${showId}`)
             .then((response) => {
+                localStorage.setItem('show', JSON.stringify(response.data));
                 const { room_Id } = response.data;
                 setRoomId(response.data.room_Id);
                 // Lấy ngày từ start_Date
@@ -54,13 +48,15 @@ function MovieSeat() {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
-    }, [showId, id]);
+    }, []);
 
     const handleSeatSelection = (seat) => {
         const isSeatSelected = selectedSeats.includes(seat);
         if (isSeatSelected) {
+            localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats.filter((selectedSeat) => selectedSeat !== seat)));
             setSelectedSeats(selectedSeats.filter((selectedSeat) => selectedSeat !== seat));
         } else {
+            localStorage.setItem('selectedSeats', JSON.stringify([...selectedSeats, seat]));
             setSelectedSeats([...selectedSeats, seat]);
         }
     };
