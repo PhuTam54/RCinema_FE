@@ -159,13 +159,14 @@ function MyOrder() {
                                             <th style={{color: "white"}}>Final Total</th>
                                             <th style={{color: "white"}}>Show ID</th>
                                             <th style={{color: "white"}}>Payment </th>
-                                            <th style={{color: "white", textAlign: "center"}}>Action</th>
+                                            <th style={{color: "white", textAlign: "center"}}>Details</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {currentOrders.map((order, index) => (
                                             <tr key={index}>
-                                                <td style={{color: "white"}}>{order.id}</td>
+                                                {/* Bug index + 1 voi tat ca trang */}
+                                                <td style={{color: "white"}}>{index + 1}</td>
                                                 <td style={{color: "white"}}>${order.final_Total}</td>
                                                 <td style={{color: "white"}}>{order.show_Id}</td>
                                                 <td style={{color: "white"}}>{order.payment_Method}</td>

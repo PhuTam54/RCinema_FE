@@ -33,6 +33,7 @@ function MovieCheckout() {
             orderService
                 .getOrder(orderCode)
                 .then((response) => {
+                    localStorage.setItem('order', JSON.stringify(response));
                     setOrder(response);
                     let priceTickets = 0;
                     let priceFoods = 0;
