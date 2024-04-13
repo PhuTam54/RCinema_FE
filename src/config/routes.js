@@ -11,7 +11,7 @@ const routes = {
     signin: '/signin',
     signup: '/signup',
     shops: '/shops',
-    shopdetail: '/shopdetail',
+    shopdetail: '/shopdetail/:id',
 
 };
 
