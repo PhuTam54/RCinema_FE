@@ -8,100 +8,57 @@ import venus from '~/assets/images/movie/exhuma.jpg';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { location, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import * as orderService from '~/services/orderService';
-import { UserContext } from '~/context/UserContext';
 
 function MovieFood() {
-    const [movies, setMovies] = useState([]);
+    const showData = JSON.parse(localStorage.getItem('show'));
+    const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats')) ?? [
+        { seatType: { seatPricings: [{ price: 0 }] } },
+    ];
+    const selectedSeatName = JSON.parse(localStorage.getItem('selectedSeatName')) ?? [];
+    const movie = JSON.parse(localStorage.getItem('movie')) ?? {};
+    const totalPrice = JSON.parse(localStorage.getItem('totalPrice')) ?? {};
+
     const [mySeats, setMySeats] = useState([]);
-    const { id, showId } = useParams();
     const [foods, setFoods] = useState([]);
-    const location = useLocation();
-    const [selectedSeats, setSelectedSeats] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0);
     const [startTime, setStartTime] = useState('');
     const [startDate, setStartDate] = useState('');
     const [roomId, setRoomId] = useState(1);
     const [bill, setBill] = useState([]);
 
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const seats = params.get('seats');
-        // const totalPrice = params.get('totalPrice');
-
-        setSelectedSeats(seats.split(','));
-        // setTotalPrice(parseInt(totalPrice));
-    }, [location.search]);
-
-    useEffect(() => {
         axios
-            .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
-            .then((response) => {
-                setMovies(response.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
-    }, [id]);
-
-    useEffect(() => {
-        axios
-            .get(`https://localhost:7168/api/v1/Foods`)
+            .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Foods`)
             .then((response) => {
                 setFoods(response.data);
             })
             .catch((error) => {
                 console.error('Error fetching food data:', error);
             });
+
+        const { room_Id, start_Date } = showData;
+        setRoomId(room_Id);
+
+        const startDateParts = start_Date.split('T');
+        const date = startDateParts[0];
+        const timeParts = startDateParts[1].split(':');
+        const hours = timeParts[0];
+        const minutes = timeParts[1];
+        const formattedStartTime = `${hours}:${minutes}`;
+
+        setStartTime(formattedStartTime);
+        setStartDate(date);
+
+        selectedSeats.forEach((seat) => {
+            // seat to object
+            seat = JSON.parse(seat);
+            setMySeats((prevSeats) => [...prevSeats, seat]);
+        });
     }, []);
-
-    useEffect(() => {
-        axios
-            .get(`https://localhost:7168/api/v1/Shows/id?id=${showId}`)
-            .then((response) => {
-                const { room_Id, start_Date } = response.data;
-                setRoomId(room_Id);
-
-                const startDateParts = start_Date.split('T');
-                const date = startDateParts[0];
-                const timeParts = startDateParts[1].split(':');
-                const hours = timeParts[0];
-                const minutes = timeParts[1];
-                const formattedStartTime = `${hours}:${minutes}`;
-
-                setStartTime(formattedStartTime);
-                setStartDate(date);
-            })
-            .catch((error) => {
-                console.error('Error fetching show data:', error);
-            });
-    }, [showId, selectedSeats]);
-    // Get the roomId after it has been set above and call the API to fetch the seats in that room
-    // console.log(mySeats)
-    // console.log(totalPrice)
-    useEffect(() => {
-        axios
-            .get(`https://localhost:7168/api/v1/Seats`)
-            .then((response) => {
-                selectedSeats.map((seat) => {
-                    // console.log(seat)
-                    // console.log(mySeats)
-                    if (seat && !mySeats.some((mySeat) => String(mySeat.id) === seat)) {
-                        const seatData = response.data.find((data) => String(data.id) === seat);
-                        setMySeats((prevSeats) => [...prevSeats, seatData]);
-                        // Lỗi khi bị re render sẽ lại cộng thêm giá trị vào totalPrice
-                        setTotalPrice((prevPrice) => prevPrice + seatData.seatType.seatPricings[0].price);
-                    }
-                    return null; // Add a return statement to the map function
-                });
-            })
-            .catch((error) => {
-                console.error('Error fetching seats data:', error);
-            });
-    }, [selectedSeats, roomId]);
 
     const addToBill = (food, qty) => {
         const existingItemIndex = bill.findIndex((item) => item.name === food.name);
@@ -120,6 +77,13 @@ function MovieFood() {
         }
     };
 
+    const handleRemoveFromBill = (food) => {
+        const existingItemIndex = bill.findIndex((item) => item.name === food.name);
+        const updatedBill = [...bill];
+        updatedBill.splice(existingItemIndex, 1);
+        setBill(updatedBill);
+    };
+
     const getTokenData = () => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -135,17 +99,18 @@ function MovieFood() {
 
     const orderData = {
         order_Code: `ThisIsACodeUnique_${Date.now()}_${Math.random()}`,
-        total: 0,
-        discount_Amount: 1,
+        total: totalPrice + bill.reduce((acc, curr) => acc + curr.price * curr.qty, 0),
+        discount_Amount: 0,
         discount_Code: 'thisIsADiscountCode',
         payment_Method: '',
     };
 
+    orderData.final_Total = orderData.total - orderData.discount_Amount;
     orderData.qR_Code = orderData.order_Code;
 
     const orderTicketData = {
         code: `ThisIsATicketCodeUnique_${Date.now()}_${Math.random()}`,
-        price: 0, // Call API seatPrice
+        price: 0,
         is_Used: false,
     };
 
@@ -155,23 +120,14 @@ function MovieFood() {
     };
 
     const handleCheckout = () => {
-        const usedSeatIds = [];
-        mySeats.forEach((seat) => {
-            if (!usedSeatIds.includes(seat.id)) {
-                usedSeatIds.push(seat.id);
-                orderData.total += seat.seatType.seatPricings[0].price;
-                orderData.total += bill.reduce((acc, curr) => acc + curr.price * curr.qty, 0);
-            }
-        });
-        orderData.final_Total = orderData.total - orderData.discount_Amount;
-        console.log(orderData);
         orderService
-            .createOrder(orderData, userId, showId)
+            .createOrder(orderData, userId, showData.id)
             .then((response) => {
                 orderService
                     .getOrder(response.order_Code)
                     .then((orderResponse) => {
                         const orderId = orderResponse.id;
+                        localStorage.setItem('orderCode', orderResponse.order_Code);
 
                         const usedSeatIds = [];
                         mySeats.forEach((seat) => {
@@ -183,13 +139,17 @@ function MovieFood() {
                                 });
                             }
                         });
+
+                        let selectedFoods = [];
                         bill.forEach((food) => {
+                            selectedFoods.push(food);
                             orderFoodData.qty = food.qty;
                             orderFoodData.price = food.price;
                             orderService.createOrderFood(orderFoodData, orderId, food.id).catch((error) => {
                                 toast.error('Failed to create order food', error);
                             });
                         });
+                        localStorage.setItem('selectedFoods', JSON.stringify(selectedFoods));
                     })
                     .then(() => {
                         toast.success('Order has been created');
@@ -209,7 +169,7 @@ function MovieFood() {
                 <div className="container">
                     <div className="details-banner-wrapper">
                         <div className="details-banner-content style-two">
-                            <h3 className="title">{movies.title}</h3>
+                            <h3 className="title">{movie.title}</h3>
                             <div className="tags">
                                 <a href="#0">City Walk</a>
                                 <a href="#0">English - 2D</a>
@@ -304,7 +264,7 @@ function MovieFood() {
                                 <h4 className="title">Booking Summary</h4>
                                 <ul>
                                     <li>
-                                        <h6 className="subtitle">{movies.title}</h6>
+                                        <h6 className="subtitle">{movie.title}</h6>
                                         <span className="info">English-2d</span>
                                     </li>
                                     <li>
@@ -316,14 +276,7 @@ function MovieFood() {
                                             <span>
                                                 {startDate}, {startTime}
                                             </span>
-                                            <div>
-                                                {selectedSeats.map((seat, index) => (
-                                                    <span key={index}>
-                                                        {seat}
-                                                        {index !== selectedSeats.length - 1 ? ', ' : ''}
-                                                    </span>
-                                                ))}
-                                            </div>
+                                            <div>{selectedSeatName.join(', ')}</div>
                                         </div>
                                     </li>
                                     <li>
@@ -344,9 +297,17 @@ function MovieFood() {
                                                 <li key={index}>
                                                     <h6 className="info">
                                                         <span>
-                                                            {item.name} X {item.qty}
+                                                            {item.name}(${item.price}) X {item.qty}
                                                         </span>
-                                                        <span>${item.price}</span>
+                                                        <span>
+                                                            ${item.price * item.qty}{' '}
+                                                            <span onClick={() => handleRemoveFromBill(item)}>
+                                                                <FontAwesomeIcon
+                                                                    className={'times'}
+                                                                    icon={faTimesCircle}
+                                                                />
+                                                            </span>
+                                                        </span>
                                                     </h6>
                                                 </li>
                                             ))}
@@ -374,7 +335,7 @@ function MovieFood() {
                                 <Link
                                     onClick={handleCheckout}
                                     className="custom-button"
-                                    to={`/moviecheckout/${movies.id}/show/${showId}?orderCode=${orderData.order_Code}`}
+                                    to={`/moviecheckout/${movie.id}/show/${showData.id}`}
                                 >
                                     Seat Plans
                                     <i className="fas fa-angle-right" />

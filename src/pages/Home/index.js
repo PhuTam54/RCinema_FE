@@ -25,11 +25,10 @@ import axios from 'axios';
 function Home() {
   const [movies, setMovies] = useState([]);
   const [shops, setShops] = useState([]);
-
-
+  const [search, setSearch] = useState('');
   useEffect(() => {
       axios
-          .get(`https://localhost:7168/api/v1/Movies`)
+          .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Movies`)
           .then((response) => {
               setMovies(response.data);
           })
@@ -44,6 +43,9 @@ function Home() {
         console.error('Error fetching shops', error);
       });
       }, []);
+      const filteredMovies = movies.filter(movie =>
+        movie.title.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
         <>
@@ -120,7 +122,8 @@ function Home() {
           <div className="tab-item active">
             <form className="ticket-search-form">
               <div className="form-group large">
-                <input type="text" placeholder="Search for Movies" />
+                <input type="text"  value={search}
+                onChange={e => setSearch(e.target.value)} placeholder="Search for Movies" />
                 <button type="submit">
                   <i className="fas fa-search" />
                 </button>
@@ -393,7 +396,7 @@ function Home() {
                     <a key={movie.id}>
                       <Link to={`/moviedetail/${movie.id}`}> 
                         <img style={{ width: 260, height: 370 }} 
-                        src={movie.movie_Image} alt={movie.title} />
+                        src={movie.movie_Image.includes('/') ? movie.movie_Image : 'Cinema/pixner.net/boleto/demo/assets/images/movie/exhuma.jpg'} alt={movie.title} />
                       </Link>
                     </a>
                     </div>

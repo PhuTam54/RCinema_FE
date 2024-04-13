@@ -17,12 +17,21 @@ import { Link } from 'react-router-dom';
 const MovieDetail1 = ({ match }) => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
+
   useEffect(() => {
-    fetch(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
+    fetch(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Movies/id?id=${id}`)
     .then(response => response.json())
-    .then(data => setMovie(data))
+    .then(data => 
+      setMovie(data)
+    )
     .catch(error => console.error('Error fetching movie detail:', error));
-}, [id]);
+}, []);
+
+localStorage.setItem('movie', JSON.stringify(movie))
+
+const handleBook = () => {
+  window.location.href = `/movieticket/${movie.id}`;
+}
 
   if (!movie) {
     return <div className="">404 NOT FOUND</div>;
@@ -168,7 +177,7 @@ const MovieDetail1 = ({ match }) => {
                     </p>
                   </div>
                 </div>
-                <Link className="custom-button" to={`/movieticket/${movie.id}`}>book tickets</Link>
+                <a className="custom-button" onClick={handleBook}>book tickets</a>
                 {/* <Link className="custom-button" to={`/movieticket/${movie.id}`} onClick={() => window.location.href = `/movieticket/${movie.id}`}>book tickets</Link> */}
 
 

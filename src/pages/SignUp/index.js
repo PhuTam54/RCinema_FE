@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import axios from "axios";
 
 function SignUp() {
-  const url = "https://localhost:7168/api/v1/LoginRegister/Register";
+  const url = "https://rmallbe20240413154509.azurewebsites.net/api/v1/LoginRegister/Register";
   const [data, setData] = useState({
     userName: "",
     email: "",

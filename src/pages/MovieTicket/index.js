@@ -11,14 +11,17 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 function MovieTicket() {
+  const movie = JSON.parse(localStorage.getItem('movie')) ?? {};
+
   const [selectedDate, setSelectedDate] = useState('');
-  const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);
   const { id } = useParams();
-  const [selectedMovieId, setSelectedMovieId] = useState(null); // State để lưu id của phim được chọn
   // const [selectedRoomId, setSelectedRoomId] = useState(null); 
   const [selectedShowId, setSelectedShowId] = useState(null); 
   const [showModal, setShowModal] = useState(false);
+  const [showDates, setShowDates] = useState([]);
+  const [filteredShowsByDate, setFilteredShowsByDate] = useState([]); 
+
 
   const handleBookButtonClick = ( showId) => {
     // setSelectedRoomId(roomId);
@@ -26,43 +29,37 @@ function MovieTicket() {
     setShowModal(true);
   };
 
-  useEffect(() => {
-    axios.get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
-      .then((response) => {
-        setMovies(response.data);
-        setSelectedMovieId(response.data.id); // Lưu id của phim được chọn từ URL vào state
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-
-    axios.get(`https://localhost:7168/api/v1/Shows/movieId?movieId=${id}`)
-      .then((response) => {
-        setShows(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, [id]);
-
-  const currentDate = new Date().toISOString().split('T')[0];
-
-  const nextDays = [];
-  for (let i = 0; i < 4; i++) {
-    const nextDate = new Date();
-    nextDate.setDate(nextDate.getDate() + i + 1);
-    nextDays.push(nextDate.toISOString().split('T')[0]);
-  }
-
   const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
+    const selectedDate = event.target.value;
+    setSelectedDate(selectedDate);
+    const filteredShows = shows.filter(show => show.start_Date.split('T')[0] === selectedDate);
+    setFilteredShowsByDate(filteredShows);
   };
 
+  useEffect(() => {
+
+    axios.get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Shows/movieId?movieId=${id}`)
+      .then((response) => {
+        setShows(response.data);
+        const dates = response.data.map(show => show.start_Date.split('T')[0]);
+        setShowDates([...new Set(dates)]); 
+        if (dates.length > 0) {
+          const firstDate = dates[0];
+          setSelectedDate(firstDate);
+          const filteredShows = response.data.filter(show => show.start_Date.split('T')[0] === firstDate);
+          setFilteredShowsByDate(filteredShows);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+ 
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
-  const filteredShows = shows.filter(show => show.movie_Id === selectedMovieId);
 
   return (
     <>
@@ -70,7 +67,7 @@ function MovieTicket() {
         <div className="container">
           <div className="details-banner-wrapper">
             <div className="details-banner-content">
-              <h3 className="title">{movies.title}</h3>
+              <h3 className="title">{movie.title}</h3>
               <div className="tags">
                 <a href="#0">English</a>
                 <a href="#0">Hindi</a>
@@ -91,9 +88,8 @@ function MovieTicket() {
               </div>
               <span className="type">Date</span>
               <select className="select-bar" style={{ backgroundColor: "#032055" }} onChange={handleDateChange} value={selectedDate}>
-                <option value={currentDate}>{currentDate}</option>
-                {nextDays.map((date, index) => (
-                  <option key={index} value={date}>{date}</option>
+              {showDates.map(date => (
+                  <option key={date} value={date}>{date}</option>
                 ))}
               </select>
             </div>
@@ -120,7 +116,7 @@ function MovieTicket() {
           <div className="row justify-content-center">
             <div className="col-lg-9 mb-5 mb-lg-0">
               <ul className="seat-plan-wrapper bg-five">
-                {filteredShows.map((show, index) => (
+                {filteredShowsByDate.map((show, index) => (
                   <li key={index} style={{display: "flex"}}>
                     <div className="movie-name">
                       <div className="icons">
@@ -164,7 +160,7 @@ function MovieTicket() {
             <div className="thumb">
               <img src={seatplan} alt="movie" />
             </div>
-            <Link style={{ maxWidth: 150, margin: "0 auto" }} className="custom-button" to={`/movieseat/${selectedMovieId}/show/${selectedShowId}`}> 
+            <Link style={{ maxWidth: 150, margin: "0 auto" }} className="custom-button" to={`/movieseat/${movie.id}/show/${selectedShowId}`}> 
               Seat Plans
               <i className="fas fa-angle-right" />
             </Link>

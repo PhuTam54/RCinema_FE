@@ -10,27 +10,22 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 function MovieSeat() {
-    const [movies, setMovies] = useState([]);
+    const movies = JSON.parse(localStorage.getItem('movie')) ?? {};
+
     const [seats, setSeats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const { showId, id } = useParams();
     const [roomId, setRoomId] = useState('');
+    const [selectedSeatName, setSelectedSeatName] = useState([]);
     const [startTime, setStartTime] = useState('');
     const [startDate, setStartDate] = useState('');
 
     useEffect(() => {
         axios
-            .get(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
+            .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Shows/id?id=${showId}`)
             .then((response) => {
-                setMovies(response.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching movie data:', error);
-            });
-        axios
-            .get(`https://localhost:7168/api/v1/Shows/id?id=${showId}`)
-            .then((response) => {
+                localStorage.setItem('show', JSON.stringify(response.data));
                 const { room_Id } = response.data;
                 setRoomId(response.data.room_Id);
                 // Lấy ngày từ start_Date
@@ -46,7 +41,9 @@ function MovieSeat() {
 
                 setStartTime(formattedStartTime);
                 setStartDate(date);
-                return axios.get(`https://localhost:7168/api/v1/Seats/roomId?roomId=${room_Id}`);
+                return axios.get(
+                    `https://rmallbe20240413154509.azurewebsites.net/api/v1/Seats/roomId?roomId=${room_Id}`,
+                );
             })
             .then((response) => {
                 setSeats(response.data);
@@ -54,20 +51,31 @@ function MovieSeat() {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
-    }, [showId, id]);
+    }, []);
 
-    const handleSeatSelection = (seat) => {
+    const handleSeatSelection = (seat, seatName) => {
         const isSeatSelected = selectedSeats.includes(seat);
         if (isSeatSelected) {
-            setSelectedSeats(selectedSeats.filter((selectedSeat) => selectedSeat !== seat));
+            const selectedSeatsToLocal = selectedSeats.filter((selectedSeat) => selectedSeat !== seat);
+            localStorage.setItem('selectedSeats', JSON.stringify(selectedSeatsToLocal));
+            const selectedSeatNameToLocal = selectedSeatName.filter((selectedSeat) => selectedSeat !== seatName);
+            localStorage.setItem('selectedSeatName', JSON.stringify(selectedSeatNameToLocal));
+            setSelectedSeats(selectedSeatsToLocal);
+            setSelectedSeatName(selectedSeatNameToLocal);
         } else {
-            setSelectedSeats([...selectedSeats, seat]);
+            const updatedSelectedSeats = [...selectedSeats, seat];
+            const updatedSelectedSeatName = [...selectedSeatName, seatName];
+            localStorage.setItem('selectedSeats', JSON.stringify(updatedSelectedSeats));
+            localStorage.setItem('selectedSeatName', JSON.stringify(updatedSelectedSeatName));
+            setSelectedSeats(updatedSelectedSeats);
+            setSelectedSeatName(updatedSelectedSeatName);
         }
     };
 
     const isSeatSelected = (seat) => {
         return selectedSeats.includes(seat);
     };
+
     const groupedSeats = seats.reduce((acc, seat) => {
         if (!acc[seat.row_Number]) {
             acc[seat.row_Number] = [];
@@ -77,16 +85,23 @@ function MovieSeat() {
     }, {});
 
     useEffect(() => {
-        // Seat price...
-        const pricePerSeat = 50;
-        setTotalPrice(selectedSeats.length * pricePerSeat);
+        if (localStorage.getItem('selectedSeats') != null) {
+            let selectedSeatsInLocal = JSON.parse(localStorage.getItem('selectedSeats')) ?? [
+                { seatType: { seatPricings: [{ price: 0 }] } },
+            ];
+            let newTotalPrice = 0;
+            selectedSeatsInLocal.forEach((seat) => {
+                // seat to object
+                seat = JSON.parse(seat);
+                newTotalPrice += seat.seatType.seatPricings[0].price;
+            });
+            setTotalPrice(newTotalPrice);
+            localStorage.setItem('totalPrice', JSON.stringify(newTotalPrice));
+        }
     }, [selectedSeats]);
 
     const proceedToBook = () => {
-        // Truyền thông tin ghế đã chọn và tổng tiền sang trang mới
-        window.location.href = `/moviefood/${movies.id}/show/${showId}?seats=${selectedSeats.join(
-            ',',
-        )}&totalPrice=${totalPrice}`;
+        window.location.href = `/moviefood/${movies.id}/show/${showId}`;
     };
 
     return (
@@ -152,109 +167,32 @@ function MovieSeat() {
                     {/* Hiển thị ghế dựa trên dữ liệu từ API */}
                     <div className="screen-wrapper">
                         <ul className="seat-area">
-                            <li className="seat-line">
-                                <span>A</span>
-                                <ul className="seat--area">
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <span>A</span>
-                            </li>
-                            {/* seat 2 */}
-                            <li className="seat-line">
-                                <span>B</span>
-                                <ul className="seat--area">
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat2} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <span>B</span>
-                            </li>
-
                             {/* seat API */}
                             {Object.entries(groupedSeats).map(([rowNumber, rowSeats]) => (
                                 <li className="seat-line" key={rowNumber}>
-                                    <span>{rowNumber}</span>
+                                    <span>{String.fromCharCode(65 + parseInt(rowNumber) - 1)}</span>
                                     <ul className="seat--area">
                                         {rowSeats.map((seat) => (
                                             // <li key={seat.id} className="single-seat" onClick={() => handleSeatSelection(`${String.fromCharCode(65 + seat.row_Number - 1)}${seat.seat_Number}`)} style={{ fontWeight: isSeatSelected(`${String.fromCharCode(65 + seat.row_Number - 1)}${seat.seat_Number}`) ? 'bold' : 'normal' }}>
                                             <li
                                                 key={seat.id}
                                                 className="single-seat"
-                                                onClick={() => handleSeatSelection(`${seat.id}`)}
-                                                style={{ fontWeight: isSeatSelected(`${seat.id}`) ? 'bold' : 'normal' }}
+                                                onClick={() =>
+                                                    handleSeatSelection(
+                                                        `${JSON.stringify(seat)}`,
+                                                        `${String.fromCharCode(65 + seat.row_Number - 1)}${
+                                                            seat.seat_Number
+                                                        }`,
+                                                    )
+                                                }
+                                                style={{
+                                                    fontWeight: isSeatSelected(`${JSON.stringify(seat)}`)
+                                                        ? 'bold'
+                                                        : 'normal',
+                                                }}
                                             >
                                                 <img
-                                                    src={
-                                                        isSeatSelected(
-                                                            `${String.fromCharCode(65 + seat.row_Number - 1)}${
-                                                                seat.seat_Number
-                                                            }`,
-                                                        )
-                                                            ? seated1
-                                                            : seat1
-                                                    }
+                                                    src={isSeatSelected(`${JSON.stringify(seat)}`) ? seated1 : seat1}
                                                     alt="seat"
                                                 />
                                                 <span className="sit-num">{`${String.fromCharCode(
@@ -263,141 +201,17 @@ function MovieSeat() {
                                             </li>
                                         ))}
                                     </ul>
-                                    <span>{rowNumber}</span>
+                                    <span>{String.fromCharCode(65 + parseInt(rowNumber) - 1)}</span>
                                 </li>
                             ))}
-
-                            {/* end */}
-                            {/* seat 3 */}
-                            <li className="seat-line">
-                                <span>G</span>
-                                <ul className="seat--area">
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <span>G</span>
-                            </li>
-                            {/* seat 4 */}
-                            <li className="seat-line">
-                                <span>H</span>
-                                <ul className="seat--area">
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="front-seat">
-                                        <ul>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                            <li className="single-seat">
-                                                <img src={seat1} alt="seat" />
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <span>H</span>
-                            </li>
                         </ul>
                     </div>
 
                     <div className="proceed-book bg_img" style={{ backgroundImage: `url(${bannerproceed})` }}>
                         <div className="proceed-to-book">
                             <div className="book-item">
-                                <span>You have Choosed Seat</span>
-                                <h3 className="title">{selectedSeats.join(', ')}</h3>
+                                <span>You have Chosen Seat</span>
+                                <h3 className="title">{selectedSeatName.join(', ')}</h3>
                             </div>
                             <div className="book-item">
                                 <span>total price</span>
