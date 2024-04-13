@@ -38,7 +38,7 @@ function MovieTicket() {
 
   useEffect(() => {
 
-    axios.get(`https://localhost:7168/api/v1/Shows/movieId?movieId=${id}`)
+    axios.get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Shows/movieId?movieId=${id}`)
       .then((response) => {
         setShows(response.data);
         const dates = response.data.map(show => show.start_Date.split('T')[0]);

@@ -19,7 +19,7 @@ const MovieDetail1 = ({ match }) => {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    fetch(`https://localhost:7168/api/v1/Movies/id?id=${id}`)
+    fetch(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Movies/id?id=${id}`)
     .then(response => response.json())
     .then(data => 
       setMovie(data)

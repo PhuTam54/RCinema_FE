@@ -68,7 +68,7 @@ function MovieCheckout() {
         paymentData.amount = amountAfterVAT * 23000;
         // paymentService
         //     .paymentPaypal(paymentData)
-        axios.post('https://localhost:7168/api/v1/Payments/PayPal', paymentData)
+        axios.post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/PayPal', paymentData)
             .then((response) => {
                 console.log(response);
                 window.location.href = response.data;

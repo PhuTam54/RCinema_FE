@@ -27,7 +27,7 @@ function SignIn() {
     setLoadingAPI(true);
     e.preventDefault();
     try {
-      const response = await axios.post('https://localhost:7168/api/v1/LoginRegister/Login', {
+      const response = await axios.post('https://rmallbe20240413154509.azurewebsites.net/api/v1/LoginRegister/Login', {
         email,
         password
       });

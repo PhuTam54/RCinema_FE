@@ -32,7 +32,7 @@ function MovieFood() {
     useEffect(() => {
 
         axios
-            .get(`https://localhost:7168/api/v1/Foods`)
+            .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Foods`)
             .then((response) => {
                 setFoods(response.data);
             })
@@ -57,7 +57,7 @@ function MovieFood() {
         // console.log(totalPrice)
 
         axios
-            .get(`https://localhost:7168/api/v1/Seats`)
+            .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Seats`)
             .then((response) => {
                 selectedSeats.map((seat) => {
                     // console.log(seat)

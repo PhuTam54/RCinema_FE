@@ -27,7 +27,7 @@ function MyOrder() {
     const [ordersPerPage] = useState(5);
     useEffect(() => {
         axios
-            .get(`https://localhost:7168/api/v1/Orders/userId?userId=${userId}`)
+            .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Orders/userId?userId=${userId}`)
             .then((response) => {
                 setOrders(response.data);
             })
@@ -40,7 +40,7 @@ function MyOrder() {
         if (selectedShowId) {
             // Gọi API khi selectedShowId thay đổi
             axios
-                .get(`https://localhost:7168/api/v1/Shows/id?id=${selectedShowId}`)
+                .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Shows/id?id=${selectedShowId}`)
                 .then((response) => {
                     setShowData(response.data);
                 })
@@ -53,7 +53,7 @@ function MyOrder() {
         if (showData) {
             // Gọi API để lấy thông tin về phim
             axios
-                .get(`https://localhost:7168/api/v1/Movies/id?id=${showData.movie_Id}`)
+                .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Movies/id?id=${showData.movie_Id}`)
                 .then((response) => {
                     setMovieData(response.data);
                 })
@@ -63,7 +63,7 @@ function MyOrder() {
     
           
             axios
-                .get(`https://localhost:7168/api/v1/Rooms/id?id=${showData.room_Id}`)
+                .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Rooms/id?id=${showData.room_Id}`)
                 .then((response) => {
                     setRoomData(response.data);
                 })
