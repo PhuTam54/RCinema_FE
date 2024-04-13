@@ -24,6 +24,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 function Home() {
   const [movies, setMovies] = useState([]);
+  const [shops, setShops] = useState([]);
   const [search, setSearch] = useState('');
   useEffect(() => {
       axios
@@ -34,6 +35,13 @@ function Home() {
           .catch((error) => {
               console.error('Error fetching data:', error);
           });
+          axios.get('https://localhost:7168/api/v1/Shops')
+      .then(response => {
+        setShops(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching shops', error);
+      });
       }, []);
       const filteredMovies = movies.filter(movie =>
         movie.title.toLowerCase().includes(search.toLowerCase())
@@ -373,7 +381,7 @@ function Home() {
           <div className="article-section padding-bottom">
             <div className="section-header-1">
               <h2 className="title">movies</h2>
-              <a className="view-all" href="movie-grid.html">
+              <a className="view-all" href="/moviegird">
                 View All
               </a>
             </div>
@@ -381,7 +389,7 @@ function Home() {
 
             {/* movie */}
             <div className="row mb-10 justify-content-center">
-              {filteredMovies.map((movie, index) => (
+              {movies.slice(0,3).map((movie, index) => (
                 <div key={index} className="col-sm-6 col-lg-4">
                   <div className="movie-grid">
                     <div className="movie-thumb c-thumb">
@@ -507,69 +515,31 @@ function Home() {
               </a>
             </div>
             <div className="row mb-30-none justify-content-center">
-              <div className="col-sm-6 col-lg-4">
+              {shops.map((shop, index) => (
+              <div key={index} className="col-sm-6 col-lg-4">
                 <div className="sports-grid">
                   <div className="movie-thumb c-thumb">
-                    <a href="#0">
-                      <img
-                        src={shop1}
-                        alt="sports"
-                      />
+                  <a key={shop.id}>
+                      <Link to={`/shopdetail/${shop.id}`}> 
+                        <img style={{ width: 260, height: 370 }} 
+                        src={shop.image} alt={shop.name} />
+                      </Link>
                     </a>
+
                     
                   </div>
                   <div className="movie-content bg-one">
-                    <h5 className="title m-0">
-                      <a href="/shopdetail">alone</a>
-                    </h5>
+                  <h5 className="title m-0">
+                        <Link to={`/shopdetail/${shop.id}`}>{shop.name}</Link>
+                      </h5>
                     <div className="movie-rating-percent">
-                      <span>327 Montague Street</span>
+                      <span>Address: {shop.address}</span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="col-sm-6 col-lg-4">
-                <div className="sports-grid">
-                  <div className="movie-thumb c-thumb">
-                    <a href="#0">
-                      <img
-                        src={shop2}
-                        alt="sports"
-                      />
-                    </a>
-                    
-                  </div>
-                  <div className="movie-content bg-one">
-                    <h5 className="title m-0">
-                      <a href="#0">world cricket league 2020</a>
-                    </h5>
-                    <div className="movie-rating-percent">
-                      <span>327 Montague Street</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-6 col-lg-4">
-                <div className="sports-grid">
-                  <div className="movie-thumb c-thumb">
-                    <a href="#0">
-                      <img
-                        src={shop3}
-                        alt="sports"
-                      />
-                    </a>
-                    
-                  </div>
-                  <div className="movie-content bg-one">
-                    <h5 className="title m-0">
-                      <a href="#0">basket ball tournament 2020</a>
-                    </h5>
-                    <div className="movie-rating-percent">
-                      <span>327 Montague Street</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              ))}
+              
             </div>
           </div>
         </div>

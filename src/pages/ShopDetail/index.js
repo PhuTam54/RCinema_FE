@@ -7,10 +7,29 @@ import banner01 from "~/assets/images/sidebar/banner/banner01.jpg"
 import shop1_2 from "~/assets/images/shop/shop1-2.jpg"
 import shop1_1 from "~/assets/images/shop/shop1-1.jpg"
 import shop1_3 from "~/assets/images/shop/shop1-3.jpg"
+import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { faDisplay } from "@fortawesome/free-solid-svg-icons"
 
 
 
-function ShopDetail() {
+const ShopDetail = () => {
+  const { id } = useParams();
+  const [shop, setShop] = useState(null);
+  
+
+  useEffect(() => {
+    fetch(`https://localhost:7168/api/v1/Shops/id?id=${id}`)
+    .then((res) => res.json())
+    .then((data) => setShop(data))
+    .catch((err) => console.log(err));
+  }, [id]);
+  
+
+  if (!shop) {
+    return <div>Loading...</div>;}
+    const { name, image, address, phone_Number, description, products } = shop;
     return ( 
         <>
   {/* ==========Banner-Section========== */}
@@ -26,7 +45,7 @@ function ShopDetail() {
             
         </div>
         <div className="details-banner-content offset-lg-3">
-          <h3 className="title">Venus</h3>
+          <h3 className="title">{name}</h3>
           <div className="tags">
             <a href="#0">English</a>
             <a href="#0">Hindi</a>
@@ -211,451 +230,24 @@ function ShopDetail() {
         </div>
         <div className="col-lg-9 mb-50">
           <div className="movie-details">
-            <h3 className="title">photos</h3>
-            <div className="details-photos owl-carousel">
-              <div className="thumb">
-                <a
-                  href={shop1_1}
-                  className="img-pop"
-                >
-                  <img
-                    src={shop1_1}
-                    alt="movie"
-                  />
-                </a>
-              </div>
-              <div className="thumb">
-                <a
-                  href={shop1_2}
-                  className="img-pop"
-                >
-                  <img
-                    src={shop1_2}
-                    alt="movie"
-                  />
-                </a>
-              </div>
-              <div className="thumb">
-                <a
-                  href={shop1_3}
-                  className="img-pop"
-                >
-                  <img
-                    src={shop1_3}
-                    alt="movie"
-                  />
-                </a>
-              </div>
-              <div className="thumb">
-                <a
-                  href={shop1_1}
-                  className="img-pop"
-                >
-                  <img
-                    src={shop1_1}
-                    alt="movie"
-                  />
-                </a>
-              </div>
-              <div className="thumb">
-                <a
-                  href={shop1_2}
-                  className="img-pop"
-                >
-                  <img
-                    src={shop1_2}
-                    alt="movie"
-                  />
-                </a>
-              </div>
-              <div className="thumb">
-                <a
-                  href={shop1_3}
-                  className="img-pop"
-                >
-                  <img
-                    src={shop1_3}
-                    alt="movie"
-                  />
-                </a>
+            
+           
+            <div className="widget-1 widget-offer">
+              <h3 className="title">Products</h3>
+              <div className="offer-body">
+                {products.map((product, index ) => (
+                  <div key={index} className="offer-item">
+                    <div className="thumb">
+                      <h2>{product.name}</h2>
+                      <p>{product.description}</p>
+                      <p>{product.price}$</p>
+                      <img src={product.image} alt={product.name} />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="tab summery-review">
-              <ul className="tab-menu">
-                <li>product</li>
-                <li className="active">
-                  user review <span>147</span>
-                </li>
-              </ul>
-              <div className="tab-area">
-                <div className="tab-item">
-                  <div className="item">
-                    <h5 className="sub-title">Synopsis</h5>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Proin vehicula eros sit amet est tincidunt aliquet. Fusce
-                      laoreet ligula ac ultrices eleifend. Donec hendrerit
-                      fringilla odio, ut feugiat mi convallis nec. Fusce elit
-                      ex, blandit vitae mattis sit amet, iaculis ac elit. Ut
-                      diam mauris, viverra sit amet dictum vel, aliquam ac quam.
-                      Ut mi nisl, fringilla sit amet erat et, convallis
-                      porttitor ligula. Sed auctor, orci id luctus venenatis,
-                      dui dolor euismod risus, et pharetra orci lectus quis
-                      sapien. Duis blandit ipsum ac consectetur scelerisque.{" "}
-                    </p>
-                  </div>
-                  <div className="item">
-                    <div className="header">
-                      <h5 className="sub-title">short</h5>
-                      <div className="navigation">
-                        <div className="cast-prev">
-                          <i className="flaticon-double-right-arrows-angles" />
-                        </div>
-                        <div className="cast-next">
-                          <i className="flaticon-double-right-arrows-angles" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="casting-slider owl-carousel">
-                      <div className="cast-item">
-                        <div className="cast-thumb">
-                          <a href="#0">
-                            <img
-                              src="assets/images/cast/cast01.jpg"
-                              alt="cast"
-                            />
-                          </a>
-                        </div>
-                        <div className="cast-content">
-                          <h6 className="cast-title">
-                            <a href="#0">Bill Hader</a>
-                          </h6>
-                          
-                          <p>As Richie Tozier</p>
-                        </div>
-                      </div>
-                      <div className="cast-item">
-                        <div className="cast-thumb">
-                          <a href="#0">
-                            <img
-                              src="assets/images/cast/cast02.jpg"
-                              alt="cast"
-                            />
-                          </a>
-                        </div>
-                        <div className="cast-content">
-                          <h6 className="cast-title">
-                            <a href="#0">nora hardy</a>
-                          </h6>
-                          
-                          <p>As raven</p>
-                        </div>
-                      </div>
-                      <div className="cast-item">
-                        <div className="cast-thumb">
-                          <a href="#0">
-                            <img
-                              src="assets/images/cast/cast03.jpg"
-                              alt="cast"
-                            />
-                          </a>
-                        </div>
-                        <div className="cast-content">
-                          <h6 className="cast-title">
-                            <a href="#0">alvin peters</a>
-                          </h6>
-                          
-                          <p>As magneto</p>
-                        </div>
-                      </div>
-                      <div className="cast-item">
-                        <div className="cast-thumb">
-                          <a href="#0">
-                            <img
-                              src="assets/images/cast/cast04.jpg"
-                              alt="cast"
-                            />
-                          </a>
-                        </div>
-                        <div className="cast-content">
-                          <h6 className="cast-title">
-                            <a href="#0">josh potter</a>
-                          </h6>
-                          
-                          <p>As quicksilver</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="item">
-                    <div className="header">
-                      <h5 className="sub-title">crew</h5>
-                      <div className="navigation">
-                        <div className="cast-prev-2">
-                          <i className="flaticon-double-right-arrows-angles" />
-                        </div>
-                        <div className="cast-next-2">
-                          <i className="flaticon-double-right-arrows-angles" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="casting-slider-two owl-carousel">
-                      <div className="cast-item">
-                        <div className="cast-thumb">
-                          <a href="#0">
-                            <img
-                              src="assets/images/cast/cast05.jpg"
-                              alt="cast"
-                            />
-                          </a>
-                        </div>
-                        <div className="cast-content">
-                          <h6 className="cast-title">
-                            <a href="#0">pete warren</a>
-                          </h6>
-                          
-                        </div>
-                      </div>
-                      <div className="cast-item">
-                        <div className="cast-thumb">
-                          <a href="#0">
-                            <img
-                              src="assets/images/cast/cast06.jpg"
-                              alt="cast"
-                            />
-                          </a>
-                        </div>
-                        <div className="cast-content">
-                          <h6 className="cast-title">
-                            <a href="#0">howard bass</a>
-                          </h6>
-                          
-                        </div>
-                      </div>
-                      <div className="cast-item">
-                        <div className="cast-thumb">
-                          <a href="#0">
-                            <img
-                              src="assets/images/cast/cast07.jpg"
-                              alt="cast"
-                            />
-                          </a>
-                        </div>
-                        <div className="cast-content">
-                          <h6 className="cast-title">
-                            <a href="#0">naomi smith</a>
-                          </h6>
-                          
-                        </div>
-                      </div>
-                      <div className="cast-item">
-                        <div className="cast-thumb">
-                          <a href="#0">
-                            <img
-                              src="assets/images/cast/cast08.jpg"
-                              alt="cast"
-                            />
-                          </a>
-                        </div>
-                        <div className="cast-content">
-                          <h6 className="cast-title">
-                            <a href="#0">tom martinez</a>
-                          </h6>
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="tab-item active">
-                  <div className="movie-review-item">
-                    <div className="author">
-                      <div className="thumb">
-                        <a href="#0">
-                          <img src="assets/images/cast/cast02.jpg" alt="cast" />
-                        </a>
-                      </div>
-                      <div className="movie-review-info">
-                        <span className="reply-date">13 Days Ago</span>
-                        <h6 className="subtitle">
-                          <a href="#0">minkuk seo</a>
-                        </h6>
-                        <span>
-                          <i className="fas fa-check" /> verified review
-                        </span>
-                      </div>
-                    </div>
-                    <div className="movie-review-content">
-                      <div className="review">
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                      </div>
-                      <h6 className="cont-title">Awesome Movie</h6>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Integer volutpat enim non ante egestas vehicula.
-                        Suspendisse potenti. Fusce malesuada fringilla lectus
-                        venenatis porttitor.{" "}
-                      </p>
-                      <div className="review-meta">
-                        <a href="#0">
-                          <i className="flaticon-hand" />
-                          <span>8</span>
-                        </a>
-                        <a href="#0" className="dislike">
-                          <i className="flaticon-dont-like-symbol" />
-                          <span>0</span>
-                        </a>
-                        <a href="#0">Report Abuse</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="movie-review-item">
-                    <div className="author">
-                      <div className="thumb">
-                        <a href="#0">
-                          <img src="assets/images/cast/cast04.jpg" alt="cast" />
-                        </a>
-                      </div>
-                      <div className="movie-review-info">
-                        <span className="reply-date">13 Days Ago</span>
-                        <h6 className="subtitle">
-                          <a href="#0">rudra rai</a>
-                        </h6>
-                        <span>
-                          <i className="fas fa-check" /> verified review
-                        </span>
-                      </div>
-                    </div>
-                    <div className="movie-review-content">
-                      <div className="review">
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                      </div>
-                      <h6 className="cont-title">Awesome Movie</h6>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Integer volutpat enim non ante egestas vehicula.
-                        Suspendisse potenti. Fusce malesuada fringilla lectus
-                        venenatis porttitor.{" "}
-                      </p>
-                      <div className="review-meta">
-                        <a href="#0">
-                          <i className="flaticon-hand" />
-                          <span>8</span>
-                        </a>
-                        <a href="#0" className="dislike">
-                          <i className="flaticon-dont-like-symbol" />
-                          <span>0</span>
-                        </a>
-                        <a href="#0">Report Abuse</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="movie-review-item">
-                    <div className="author">
-                      <div className="thumb">
-                        <a href="#0">
-                          <img src="assets/images/cast/cast01.jpg" alt="cast" />
-                        </a>
-                      </div>
-                      <div className="movie-review-info">
-                        <span className="reply-date">13 Days Ago</span>
-                        <h6 className="subtitle">
-                          <a href="#0">rafuj</a>
-                        </h6>
-                        <span>
-                          <i className="fas fa-check" /> verified review
-                        </span>
-                      </div>
-                    </div>
-                    <div className="movie-review-content">
-                      <div className="review">
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                      </div>
-                      <h6 className="cont-title">Awesome Movie</h6>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Integer volutpat enim non ante egestas vehicula.
-                        Suspendisse potenti. Fusce malesuada fringilla lectus
-                        venenatis porttitor.{" "}
-                      </p>
-                      <div className="review-meta">
-                        <a href="#0">
-                          <i className="flaticon-hand" />
-                          <span>8</span>
-                        </a>
-                        <a href="#0" className="dislike">
-                          <i className="flaticon-dont-like-symbol" />
-                          <span>0</span>
-                        </a>
-                        <a href="#0">Report Abuse</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="movie-review-item">
-                    <div className="author">
-                      <div className="thumb">
-                        <a href="#0">
-                          <img src="assets/images/cast/cast03.jpg" alt="cast" />
-                        </a>
-                      </div>
-                      <div className="movie-review-info">
-                        <span className="reply-date">13 Days Ago</span>
-                        <h6 className="subtitle">
-                          <a href="#0">bela bose</a>
-                        </h6>
-                        <span>
-                          <i className="fas fa-check" /> verified review
-                        </span>
-                      </div>
-                    </div>
-                    <div className="movie-review-content">
-                      <div className="review">
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                        <i className="flaticon-favorite-heart-button" />
-                      </div>
-                      <h6 className="cont-title">Awesome Movie</h6>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Integer volutpat enim non ante egestas vehicula.
-                        Suspendisse potenti. Fusce malesuada fringilla lectus
-                        venenatis porttitor.{" "}
-                      </p>
-                      <div className="review-meta">
-                        <a href="#0">
-                          <i className="flaticon-hand" />
-                          <span>8</span>
-                        </a>
-                        <a href="#0" className="dislike">
-                          <i className="flaticon-dont-like-symbol" />
-                          <span>0</span>
-                        </a>
-                        <a href="#0">Report Abuse</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="load-more text-center">
-                    <a href="#0" className="custom-button transparent">
-                      load more
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
