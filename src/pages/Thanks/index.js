@@ -4,39 +4,30 @@ import React, { useState, useEffect } from 'react';
 
 function Thanks() {
     const movie = JSON.parse(localStorage.getItem('movie')) ?? {};
-    const order = JSON.parse(localStorage.getItem('order'));
-
-    const [ticketsPrice, setTicketsPrice] = useState(0);
-    const [ticketsNumber, setTicketsNumber] = useState(0);
-    const [foodsPrice, setFoodsPrice] = useState(0);
-    const [VAT, setVAT] = useState(0);
-    const [amountAfterVAT, setAmountAfterVAT] = useState(0);
+    const order = JSON.parse(localStorage.getItem('order')) ?? {};
+    const selectedFoods = JSON.parse(localStorage.getItem('selectedFoods')) ?? [];
+    const selectedSeatName = JSON.parse(localStorage.getItem('selectedSeatName')) ?? [];
+    const VAT = JSON.parse(localStorage.getItem('VAT')) ?? 0;
+    const amountAfterVAT = JSON.parse(localStorage.getItem('amountAfterVAT')) ?? 0;
+    let ticketsPrice = JSON.parse(localStorage.getItem('totalPrice')) ?? 0;
+    let foodsPrice = JSON.parse(localStorage.getItem('foodsPrice')) ?? 0;
+    const startTime = (localStorage.getItem('startTime')) ?? '';
+    const startDate = (localStorage.getItem('startDate')) ?? '';
 
     setTimeout(() => {
-        localStorage.removeItem('selectedSeats');
-        localStorage.removeItem('orderCode');
-        localStorage.removeItem('show');
         localStorage.removeItem('movie');
+        localStorage.removeItem('show');
+        localStorage.removeItem('selectedSeats');
+        localStorage.removeItem('selectedFoods');
+        localStorage.removeItem('totalPrice');
+        localStorage.removeItem('foodsPrice');
+        localStorage.removeItem('orderCode');
         localStorage.removeItem('order');
-    }, 1000 * 300);
-
-    useEffect(() => {
-        let priceTickets = 0;
-        let priceFoods = 0;
-        order.tickets.map((ticket) => (priceTickets += ticket.price));
-        setTicketsPrice(priceTickets);
-        setTicketsNumber(order.tickets.length);
-        order.orderFoods.map((food) => (priceFoods += food.price * (food.qty || 1)));
-        setFoodsPrice(priceFoods);
-        if (order.final_Total > 50) {
-            setVAT(parseFloat((0.1 * order.final_Total).toFixed(2)));
-        } else if (order.final_Total > 10) {
-            setVAT(parseFloat((0.05 * order.final_Total).toFixed(2)));
-        } else {
-            setVAT(parseFloat((0.01 * order.final_Total).toFixed(2)));
-        }
-        setAmountAfterVAT(priceTickets + priceFoods + VAT);
-    }, []);
+        localStorage.removeItem('VAT');
+        localStorage.removeItem('amountAfterVAT');
+        localStorage.removeItem('startTime');
+        localStorage.removeItem('startDate');
+    }, 1000 * 10);
 
     return (
         <>
@@ -67,73 +58,82 @@ function Thanks() {
                 <div className="booking-summery bg-one">
                     <h4 className="title"> cinema ticket</h4>
                     <ul>
-                        <li>
-                            <h6 className="subtitle">{movie.title}</h6>
-                            <span className="info">English-2d</span>
-                        </li>
-                        <li>
-                            <h6 className="subtitle">
-                                <span>City Walk</span>
-                                <span>{ticketsNumber}</span>
-                            </h6>
-                            <div className="info">
-                                <span>10 SEP TUE, 11:00 PM</span> <span>Tickets</span>
-                            </div>
-                        </li>
-                        <li>
-                            <h6 className="subtitle mb-0">
-                                <span>Tickets Price</span>
-                                <span>${ticketsPrice}</span>
-                            </h6>
-                        </li>
-                    </ul>
-                    <ul className="side-shape">
-                        <li>
-                            <h6 className="subtitle">
-                                <span>combos</span>
-                                <span>${foodsPrice}</span>
-                            </h6>
-                            <span className="info">
-                                {order &&
-                                    order.orderFoods.map((orderFood, index) => (
-                                        <div key={index}>
+                                    <li>
+                                        <h6 className="subtitle">{movie.title}</h6>
+                                        <span className="info">English-2d</span>
+                                    </li>
+                                    <li>
+                                        <h6 className="subtitle">
+                                            <span>Time</span>
+                                            <span>Seats</span>
+                                        </h6>
+                                        <div className="info">
                                             <span>
-                                                {orderFood.qty} x {orderFood.food_Id}
+                                                {startDate}, {startTime}
                                             </span>
-                                            <br></br>
+                                            <div>{selectedSeatName.join(', ')}</div>
                                         </div>
-                                    ))}
-                            </span>
-                        </li>
-                        <li>
-                            <h6 className="subtitle">
-                                <span>food &amp; bevarage</span>
-                            </h6>
-                            {/* <span className="info">
+                                    </li>
+                                    <li>
+                                        <h6 className="subtitle mb-0">
+                                            <span>Tickets Price</span>
+                                            <span>${ticketsPrice}</span>
+                                        </h6>
+                                    </li>
+                                </ul>
+                                <ul className="side-shape">
+                                    <li>
+                                        <h6 className="subtitle">
+                                            <span>combos</span>
+                                            <span>${foodsPrice}</span>
+                                        </h6>
+                                        <span className="info">
+                                            {order &&
+                                                order.orderFoods &&
+                                                order.orderFoods?.map((orderFood, index) => (
+                                                    <div key={index}>
+                                                        <span>
+                                                            {orderFood.qty} x{' '}
+                                                            {
+                                                                selectedFoods.find(
+                                                                    (food) => food.id === orderFood.food_Id,
+                                                                )?.name
+                                                            }
+                                                        </span>
+                                                        <br></br>
+                                                    </div>
+                                                ))}
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <h6 className="subtitle">
+                                            <span>food &amp; bevarage</span>
+                                        </h6>
+                                        {/* <span className="info">
                                             {order.orderFoods.map((orderFood) => (
                                                 <span>{orderFood.qty} x {orderFood.food.name}</span>
                                             ))}
                                         </span> */}
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <span className="info">
-                                <span>price</span>
-                                <span>${order && order.final_Total}</span>
-                            </span>
-                            <span className="info">
-                                <span>vat</span>
-                                <span>${VAT}</span>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-                <div className="proceed-area  text-center">
-                    <h6 className="subtitle">
-                        <span>Amount Payable</span>
-                        <span>${amountAfterVAT}</span>
-                    </h6>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li>
+                                        <span className="info">
+                                            <span>Total price</span>
+                                            <span>${order && order.final_Total}</span>
+                                        </span>
+                                        <span className="info">
+                                            <span>vat</span>
+                                            <span>${VAT}</span>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className="proceed-area  text-center">
+                                <h6 className="subtitle">
+                                    <span>Amount Payable</span>
+                                    <span>${amountAfterVAT}</span>
+                                </h6>
                     <hr />
                     <div>
                         <p>Thank you for choosing our services. We appreciate your trust in our products.</p>

@@ -15,33 +15,32 @@ import * as paymentService from '~/services/paymentService';
 
 function MovieCheckout() {
     const movie = JSON.parse(localStorage.getItem('movie')) ?? {};
+    const showData = JSON.parse(localStorage.getItem('show'));
+    const selectedFoods = JSON.parse(localStorage.getItem('selectedFoods')) ?? [];
+    const orderCode = localStorage.getItem('orderCode') ?? '';
+    const selectedSeatName = JSON.parse(localStorage.getItem('selectedSeatName')) ?? [];
+    let ticketsPrice = JSON.parse(localStorage.getItem('totalPrice')) ?? 0;
+    let foodsPrice = 0;
+    selectedFoods.map((selectedFood) => (foodsPrice += selectedFood.price * (selectedFood.qty || 1)));
 
     const [order, setOrder] = useState({
-        orderFoods: [],
-        tickets: [],
+        orderFoods: [{ name: 'food', price: 0, qty: 0, food_Id: 0 }],
+        tickets: [{ price: 0 }],
     });
-
-    const orderCode = (localStorage.getItem('orderCode')) ?? {};
-    const [ticketsPrice, setTicketsPrice] = useState(0);
-    const [ticketsNumber, setTicketsNumber] = useState(0);
-    const [foodsPrice, setFoodsPrice] = useState(0);
     const [VAT, setVAT] = useState(0);
     const [amountAfterVAT, setAmountAfterVAT] = useState(0);
+    const [paymentMethod, setPaymentMethod] = useState('Paypal');
+    const [startTime, setStartTime] = useState('');
+    const [startDate, setStartDate] = useState('');
+
+    const paymentMethodList = ['VnPay', 'Momo', 'Paypal', 'Credit card'];
 
     useEffect(() => {
         setTimeout(() => {
             orderService
                 .getOrder(orderCode)
                 .then((response) => {
-                    localStorage.setItem('order', JSON.stringify(response));
                     setOrder(response);
-                    let priceTickets = 0;
-                    let priceFoods = 0;
-                    response.tickets.map((ticket) => (priceTickets += ticket.price));
-                    setTicketsPrice(priceTickets);
-                    setTicketsNumber(response.tickets.length);
-                    response.orderFoods.map((food) => (priceFoods += food.price * (food.qty || 1)));
-                    setFoodsPrice(priceFoods);
                     if (response.final_Total > 50) {
                         setVAT(parseFloat((0.1 * response.final_Total).toFixed(2)));
                     } else if (response.final_Total > 10) {
@@ -49,34 +48,105 @@ function MovieCheckout() {
                     } else {
                         setVAT(parseFloat((0.01 * response.final_Total).toFixed(2)));
                     }
-                    setAmountAfterVAT(priceTickets + priceFoods + VAT);
+                    setAmountAfterVAT(ticketsPrice + foodsPrice + VAT);
                 })
                 .catch((error) => {
                     console.error('Error fetching data:', error);
                 });
         }, 1000);
-    }, []);
+
+        const { start_Date } = showData;
+
+        const startDateParts = start_Date.split('T');
+        const date = startDateParts[0];
+        const timeParts = startDateParts[1].split(':');
+        const hours = timeParts[0];
+        const minutes = timeParts[1];
+        const formattedStartTime = `${hours}:${minutes}`;
+
+        localStorage.setItem('startTime', formattedStartTime);
+        localStorage.setItem('startDate', date);
+        setStartTime(formattedStartTime);
+        setStartDate(date);
+    }, [VAT]);
+
+    const getTokenData = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const tokenData = token.split('.')[1];
+            const decodedToken = atob(tokenData);
+            const tokenObject = JSON.parse(decodedToken);
+            return tokenObject;
+        }
+        return null;
+    };
+
+    const userEmail = getTokenData().email;
 
     const paymentData = {
-        orderType: 'Sandbox',
-        amount: 1,
-        orderDescription: 'Order movie ticket',
-        name: 'Customer',
+        amount: 1
+    };
+
+    const handleMethod = (paymentMethodItem) => {
+        console.log(paymentMethodItem);
+        setPaymentMethod(paymentMethodItem);
     };
 
     const handleCheckout = () => {
-        paymentData.amount = amountAfterVAT * 23000;
+        localStorage.setItem('VAT', JSON.stringify(VAT));
+        localStorage.setItem('amountAfterVAT', JSON.stringify(amountAfterVAT));
+        localStorage.setItem('foodsPrice', JSON.stringify(foodsPrice));
+        localStorage.setItem('order', JSON.stringify(order));
+
         // paymentService
         //     .paymentPaypal(paymentData)
-        axios.post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/PayPal', paymentData)
+        if (paymentMethod === 'Paypal') {
+            paymentData.orderType = 'Sandbox';
+            paymentData.orderDescription = "Order movie ticket";
+            paymentData.name = 'Customer';
+            paymentData.amount = amountAfterVAT * 23000;
+            axios
+            .post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/PayPal', paymentData)
             .then((response) => {
-                console.log(response);
                 window.location.href = response.data;
-                toast.success('Go to paypal');
+                toast.success(`Go to ${paymentMethod}`);
             })
             .catch((error) => {
-                toast.error('Failed to create order', error);
+                toast.error('Failed to payment', error);
             });
+        } else if (paymentMethod === 'VnPay') {
+            paymentData.OrderId = order.id;
+            paymentData.Description = "Order movie ticket";
+            paymentData.FullName = 'Customer';
+            paymentData.amount = amountAfterVAT * 23000;
+            paymentData.CreatedDate = new Date();
+            console.log(paymentData);
+            axios
+            .post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/VnPay', paymentData)
+            .then((response) => {
+                window.location.href = response.data;
+                toast.success(`Go to ${paymentMethod}`);
+            })
+            .catch((error) => {
+                toast.error('Failed to payment', error);
+            });
+        } else if (paymentMethod === 'Momo') {
+            paymentData.OrderId = order.id;
+            paymentData.OrderInfo = "Order movie ticket";
+            paymentData.FullName = 'Customer';
+            paymentData.amount = amountAfterVAT * 23000;
+            axios
+            .post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/Momo', paymentData)
+            .then((response) => {
+                window.location.href = response.data;
+                toast.success(`Go to ${paymentMethod}`);
+            })
+            .catch((error) => {
+                toast.error('Failed to payment', error);
+            });
+        } else {
+            toast.error('Not supported payment method');
+        }
     };
 
     return (
@@ -131,33 +201,6 @@ function MovieCheckout() {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-8">
-                            <div className="checkout-widget d-flex flex-wrap align-items-center justify-cotent-between">
-                                <div className="title-area">
-                                    <h5 className="title">Already a Boleto Member?</h5>
-                                    <p>Sign in to earn points and make booking easier!</p>
-                                </div>
-                                <a href="#0" className="sign-in-area">
-                                    <i className="fas fa-user" />
-                                    <span>Sign in</span>
-                                </a>
-                            </div>
-                            <div className="checkout-widget checkout-contact">
-                                <h5 className="title">Share your Contact Details </h5>
-                                <form className="checkout-contact-form">
-                                    <div className="form-group">
-                                        <input type="text" placeholder="Full Name" />
-                                    </div>
-                                    <div className="form-group">
-                                        <input type="text" placeholder="Enter your Mail" />
-                                    </div>
-                                    <div className="form-group">
-                                        <input type="text" placeholder="Enter your Phone Number " />
-                                    </div>
-                                    <div className="form-group">
-                                        <input type="submit" defaultValue="Continue" className="custom-button" />
-                                    </div>
-                                </form>
-                            </div>
                             <div className="checkout-widget checkout-contact">
                                 <h5 className="title">Promo Code </h5>
                                 <form className="checkout-contact-form">
@@ -172,63 +215,70 @@ function MovieCheckout() {
                             <div className="checkout-widget checkout-card mb-0">
                                 <h5 className="title">Payment Option </h5>
                                 <ul className="payment-option">
-                                    <li className="active">
-                                        <a href="#0">
-                                            <img src={card} alt="payment" />
-                                            <span>Credit Card</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#0">
-                                            <img src={card} alt="payment" />
-                                            <span>Debit Card</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#0">
-                                            <img src={paypal} alt="payment" />
-                                            <span>paypal</span>
-                                        </a>
-                                    </li>
+                                    {paymentMethodList.map((paymentMethodItem, index) => (
+                                        <li
+                                            onClick={() => handleMethod(paymentMethodItem)}
+                                            key={index}
+                                            className={paymentMethod === paymentMethodItem ? 'active' : ''}
+                                        >
+                                            <a href="#0">
+                                                {paymentMethodItem === 'Paypal' ? (
+                                                    <img src={paypal} alt="payment" />
+                                                ) : (
+                                                    <img src={card} alt="payment" />
+                                                )}
+                                                <span>{paymentMethodItem}</span>
+                                            </a>
+                                        </li>
+                                    ))}
                                 </ul>
-                                <h6 className="subtitle">Enter Your Card Details </h6>
-                                <form className="payment-card-form">
-                                    <div className="form-group w-100">
-                                        <label htmlFor="card1">Card Details</label>
-                                        <input type="text" id="card1" />
-                                        <div className="right-icon">
-                                            <i className="flaticon-lock" />
-                                        </div>
+                                {paymentMethod === 'Credit card' && (
+                                    <div>
+                                        <h6 className="subtitle">Enter Your Card Details (Not supported)</h6>
+                                        <form className="payment-card-form">
+                                            <div className="form-group w-100">
+                                                <label htmlFor="card1">Card Details</label>
+                                                <input type="text" id="card1" />
+                                                <div className="right-icon">
+                                                    <i className="flaticon-lock" />
+                                                </div>
+                                            </div>
+                                            <div className="form-group w-100">
+                                                <label htmlFor="card2"> Name on the Card</label>
+                                                <input type="text" id="card2" />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="card3">Expiration</label>
+                                                <input type="text" id="card3" placeholder="MM/YY" />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="card4">CVV</label>
+                                                <input type="text" id="card4" placeholder="CVV" />
+                                            </div>
+                                            <div className="form-group check-group">
+                                                <input id="card5" type="checkbox" defaultChecked="" />
+                                                <label htmlFor="card5">
+                                                    <span className="title">QuickPay</span>
+                                                    <span className="info">
+                                                        Save this card information to my Boleto account and make faster
+                                                        payments.
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            <div className="form-group">
+                                                <input
+                                                    type="submit"
+                                                    className="custom-button"
+                                                    defaultValue="make payment"
+                                                />
+                                            </div>
+                                        </form>
+                                        <p className="notice">
+                                            By Clicking "Make Payment" you agree to the{' '}
+                                            <a href="#0">terms and conditions</a>
+                                        </p>
                                     </div>
-                                    <div className="form-group w-100">
-                                        <label htmlFor="card2"> Name on the Card</label>
-                                        <input type="text" id="card2" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="card3">Expiration</label>
-                                        <input type="text" id="card3" placeholder="MM/YY" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="card4">CVV</label>
-                                        <input type="text" id="card4" placeholder="CVV" />
-                                    </div>
-                                    <div className="form-group check-group">
-                                        <input id="card5" type="checkbox" defaultChecked="" />
-                                        <label htmlFor="card5">
-                                            <span className="title">QuickPay</span>
-                                            <span className="info">
-                                                Save this card information to my Boleto account and make faster
-                                                payments.
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="form-group">
-                                        <input type="submit" className="custom-button" defaultValue="make payment" />
-                                    </div>
-                                </form>
-                                <p className="notice">
-                                    By Clicking "Make Payment" you agree to the <a href="#0">terms and conditions</a>
-                                </p>
+                                )}
                             </div>
                         </div>
                         <div className="col-lg-4">
@@ -241,11 +291,14 @@ function MovieCheckout() {
                                     </li>
                                     <li>
                                         <h6 className="subtitle">
-                                            <span>City Walk</span>
-                                            <span>{ticketsNumber}</span>
+                                            <span>Time</span>
+                                            <span>Seats</span>
                                         </h6>
                                         <div className="info">
-                                            <span>10 SEP TUE, 11:00 PM</span> <span>Tickets</span>
+                                            <span>
+                                                {startDate}, {startTime}
+                                            </span>
+                                            <div>{selectedSeatName.join(', ')}</div>
                                         </div>
                                     </li>
                                     <li>
@@ -262,14 +315,21 @@ function MovieCheckout() {
                                             <span>${foodsPrice}</span>
                                         </h6>
                                         <span className="info">
-                                            {order && order.orderFoods.map((orderFood, index) => (
-                                                <div key={index}>
-                                                    <span>
-                                                        {orderFood.qty} x {orderFood.food_Id}
-                                                    </span>
-                                                    <br></br>
-                                                </div>
-                                            ))}
+                                            {order &&
+                                                order.orderFoods &&
+                                                order.orderFoods?.map((orderFood, index) => (
+                                                    <div key={index}>
+                                                        <span>
+                                                            {orderFood.qty} x{' '}
+                                                            {
+                                                                selectedFoods.find(
+                                                                    (food) => food.id === orderFood.food_Id,
+                                                                )?.name
+                                                            }
+                                                        </span>
+                                                        <br></br>
+                                                    </div>
+                                                ))}
                                         </span>
                                     </li>
                                     <li>
@@ -286,7 +346,7 @@ function MovieCheckout() {
                                 <ul>
                                     <li>
                                         <span className="info">
-                                            <span>price</span>
+                                            <span>Total price</span>
                                             <span>${order && order.final_Total}</span>
                                         </span>
                                         <span className="info">

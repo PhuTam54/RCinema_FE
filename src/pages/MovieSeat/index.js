@@ -17,7 +17,7 @@ function MovieSeat() {
     const [totalPrice, setTotalPrice] = useState(0);
     const { showId, id } = useParams();
     const [roomId, setRoomId] = useState('');
-    const [roomName, setRoomName] = useState('');
+    const [selectedSeatName, setSelectedSeatName] = useState([]);
     const [startTime, setStartTime] = useState('');
     const [startDate, setStartDate] = useState('');
 
@@ -28,7 +28,6 @@ function MovieSeat() {
                 localStorage.setItem('show', JSON.stringify(response.data));
                 const { room_Id } = response.data;
                 setRoomId(response.data.room_Id);
-                // setRoomId(response.data.roomName);
                 // Lấy ngày từ start_Date
                 const startDateParts = response.data.start_Date.split('T');
                 const date = startDateParts[0];
@@ -42,7 +41,9 @@ function MovieSeat() {
 
                 setStartTime(formattedStartTime);
                 setStartDate(date);
-                return axios.get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Seats/roomId?roomId=${room_Id}`);
+                return axios.get(
+                    `https://rmallbe20240413154509.azurewebsites.net/api/v1/Seats/roomId?roomId=${room_Id}`,
+                );
             })
             .then((response) => {
                 setSeats(response.data);
@@ -52,20 +53,22 @@ function MovieSeat() {
             });
     }, []);
 
-    const handleSeatSelection = (seat) => {
+    const handleSeatSelection = (seat, seatName) => {
         const isSeatSelected = selectedSeats.includes(seat);
         if (isSeatSelected) {
             const selectedSeatsToLocal = selectedSeats.filter((selectedSeat) => selectedSeat !== seat);
-            console.log("Selected!!!");
-            localStorage.setItem('selectedSeats', selectedSeatsToLocal);
-            setSelectedSeats(selectedSeats.filter((selectedSeat) => selectedSeat !== seat));
-            console.log(selectedSeatsToLocal);
+            localStorage.setItem('selectedSeats', JSON.stringify(selectedSeatsToLocal));
+            const selectedSeatNameToLocal = selectedSeatName.filter((selectedSeat) => selectedSeat !== seatName);
+            localStorage.setItem('selectedSeatName', JSON.stringify(selectedSeatNameToLocal));
+            setSelectedSeats(selectedSeatsToLocal);
+            setSelectedSeatName(selectedSeatNameToLocal);
         } else {
-            console.log("Not Selected!!!");
             const updatedSelectedSeats = [...selectedSeats, seat];
-            localStorage.setItem('selectedSeats', updatedSelectedSeats);
+            const updatedSelectedSeatName = [...selectedSeatName, seatName];
+            localStorage.setItem('selectedSeats', JSON.stringify(updatedSelectedSeats));
+            localStorage.setItem('selectedSeatName', JSON.stringify(updatedSelectedSeatName));
             setSelectedSeats(updatedSelectedSeats);
-            console.log(updatedSelectedSeats);
+            setSelectedSeatName(updatedSelectedSeatName);
         }
     };
 
@@ -82,19 +85,22 @@ function MovieSeat() {
     }, {});
 
     useEffect(() => {
-        let selectedSeatsInLocal = JSON.parse(localStorage.getItem('selectedSeats')) ?? [{seatType: {seatPricings: [{price: 0}]}}];
-        console.log(selectedSeatsInLocal);
-        let selectedSeatsArray = Array.isArray(selectedSeatsInLocal) ? selectedSeatsInLocal : [selectedSeatsInLocal];
-        // console.log(selectedSeatsArray);
-        // selectedSeatsInLocal.forEach(seat => {
-        //     totalPrice += seat.seatType?.seatPricings[0].price
-        // });
-        setTotalPrice(totalPrice);
-        localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
+        if (localStorage.getItem('selectedSeats') != null) {
+            let selectedSeatsInLocal = JSON.parse(localStorage.getItem('selectedSeats')) ?? [
+                { seatType: { seatPricings: [{ price: 0 }] } },
+            ];
+            let newTotalPrice = 0;
+            selectedSeatsInLocal.forEach((seat) => {
+                // seat to object
+                seat = JSON.parse(seat);
+                newTotalPrice += seat.seatType.seatPricings[0].price;
+            });
+            setTotalPrice(newTotalPrice);
+            localStorage.setItem('totalPrice', JSON.stringify(newTotalPrice));
+        }
     }, [selectedSeats]);
 
     const proceedToBook = () => {
-        // Truyền thông tin ghế đã chọn và tổng tiền sang trang mới
         window.location.href = `/moviefood/${movies.id}/show/${showId}`;
     };
 
@@ -171,17 +177,22 @@ function MovieSeat() {
                                             <li
                                                 key={seat.id}
                                                 className="single-seat"
-                                                onClick={() => handleSeatSelection(`${JSON.stringify(seat)}`)}
-                                                style={{ fontWeight: isSeatSelected(`${JSON.stringify(seat)}`) ? 'bold' : 'normal' }}
+                                                onClick={() =>
+                                                    handleSeatSelection(
+                                                        `${JSON.stringify(seat)}`,
+                                                        `${String.fromCharCode(65 + seat.row_Number - 1)}${
+                                                            seat.seat_Number
+                                                        }`,
+                                                    )
+                                                }
+                                                style={{
+                                                    fontWeight: isSeatSelected(`${JSON.stringify(seat)}`)
+                                                        ? 'bold'
+                                                        : 'normal',
+                                                }}
                                             >
                                                 <img
-                                                    src={
-                                                        isSeatSelected(
-                                                            `${JSON.stringify(seat)}`,
-                                                        )
-                                                            ? seated1
-                                                            : seat1
-                                                    }
+                                                    src={isSeatSelected(`${JSON.stringify(seat)}`) ? seated1 : seat1}
                                                     alt="seat"
                                                 />
                                                 <span className="sit-num">{`${String.fromCharCode(
@@ -199,8 +210,8 @@ function MovieSeat() {
                     <div className="proceed-book bg_img" style={{ backgroundImage: `url(${bannerproceed})` }}>
                         <div className="proceed-to-book">
                             <div className="book-item">
-                                <span>You have Choosed Seat</span>
-                                <h3 className="title">{selectedSeats.join(', ')}</h3>
+                                <span>You have Chosen Seat</span>
+                                <h3 className="title">{selectedSeatName.join(', ')}</h3>
                             </div>
                             <div className="book-item">
                                 <span>total price</span>
