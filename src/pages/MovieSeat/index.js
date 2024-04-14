@@ -55,7 +55,7 @@ function MovieSeat() {
     const handleSeatSelection = (seat, seatName) => {
         const seatLog = JSON.parse(seat);
         if (seatLog.seatReservations.length > 0) {
-            const reservationExpiresAt = new Date(seatLog.seatReservations[-1].reservation_Expires_At);
+            const reservationExpiresAt = new Date(seatLog.seatReservations[seatLog.seatReservations.length -1].reservation_Expires_At);
             const now = new Date();
             if (reservationExpiresAt > now) {
                 return toast.error('Seat is already reserved');
@@ -205,7 +205,7 @@ function MovieSeat() {
                                                 <img
                                                     src={
                                                         seat.seatReservations.length > 0 &&
-                                                        new Date(seat.seatReservations[-1].reservation_Expires_At) >
+                                                        new Date(seat.seatReservations[seat.seatReservations.length -1].reservation_Expires_At) >
                                                             new Date() // Booked
                                                             ? selectedSeat
                                                             : seat.seatType.id === 4 // Double
