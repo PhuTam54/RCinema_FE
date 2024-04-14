@@ -2,15 +2,20 @@ import screen from '~/assets/images/movie/screen-thumb.png';
 import seat1 from '~/assets/images/movie/seat01.png';
 import seated1 from '~/assets/images/movie/seat01-free.png';
 import seat2 from '~/assets/images/movie/seat02.png';
+import seated2 from '~/assets/images/movie/seat02-free.png';
+import selectedSeat from '~/assets/images/movie/seat02-booked.png';
 import bannerproceed from '~/assets/images/movie/movie-bg-proceed.jpg';
 import venus from '~/assets/images/movie/exhuma.jpg';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import * as seatService from '~/services/seatService';
+import { toast } from 'react-toastify';
 
 function MovieSeat() {
-    const movies = JSON.parse(localStorage.getItem('movie')) ?? {};
+    const movie = JSON.parse(localStorage.getItem('movie')) ?? {};
+    const show = JSON.parse(localStorage.getItem('show')) ?? {};
 
     const [seats, setSeats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
@@ -22,31 +27,25 @@ function MovieSeat() {
     const [startDate, setStartDate] = useState('');
 
     useEffect(() => {
-        axios
-            .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Shows/id?id=${showId}`)
+        const { id, room_Id, start_Date } = show;
+        setRoomId(room_Id);
+        // Lấy ngày từ start_Date
+        const startDateParts = start_Date.split('T');
+        const date = startDateParts[0];
+
+        // Lấy giờ từ start_Date
+        const timeParts = startDateParts[1].split(':');
+        const hours = timeParts[0];
+        const minutes = timeParts[1];
+
+        const formattedStartTime = `${hours}:${minutes}`;
+
+        setStartTime(formattedStartTime);
+        setStartDate(date);
+        seatService
+            .getSeatReservation(room_Id, id)
             .then((response) => {
-                localStorage.setItem('show', JSON.stringify(response.data));
-                const { room_Id } = response.data;
-                setRoomId(response.data.room_Id);
-                // Lấy ngày từ start_Date
-                const startDateParts = response.data.start_Date.split('T');
-                const date = startDateParts[0];
-
-                // Lấy giờ từ start_Date
-                const timeParts = startDateParts[1].split(':');
-                const hours = timeParts[0];
-                const minutes = timeParts[1];
-
-                const formattedStartTime = `${hours}:${minutes}`;
-
-                setStartTime(formattedStartTime);
-                setStartDate(date);
-                return axios.get(
-                    `https://rmallbe20240413154509.azurewebsites.net/api/v1/Seats/roomId?roomId=${room_Id}`,
-                );
-            })
-            .then((response) => {
-                setSeats(response.data);
+                setSeats(response);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -54,6 +53,14 @@ function MovieSeat() {
     }, []);
 
     const handleSeatSelection = (seat, seatName) => {
+        const seatLog = JSON.parse(seat);
+        if (seatLog.seatReservations.length > 0) {
+            const reservationExpiresAt = new Date(seatLog.seatReservations[0].reservation_Expires_At);
+            const now = new Date();
+            if (reservationExpiresAt > now) {
+                return toast.error('Seat is already reserved');
+            }
+        }
         const isSeatSelected = selectedSeats.includes(seat);
         if (isSeatSelected) {
             const selectedSeatsToLocal = selectedSeats.filter((selectedSeat) => selectedSeat !== seat);
@@ -101,7 +108,7 @@ function MovieSeat() {
     }, [selectedSeats]);
 
     const proceedToBook = () => {
-        window.location.href = `/moviefood/${movies.id}/show/${showId}`;
+        window.location.href = `/moviefood/${movie.id}/show/${show.id}`;
     };
 
     return (
@@ -114,7 +121,7 @@ function MovieSeat() {
                 <div className="container">
                     <div className="details-banner-wrapper">
                         <div className="details-banner-content style-two">
-                            <h3 className="title">{movies.title}</h3>
+                            <h3 className="title">{movie.title}</h3>
                             <div className="tags">
                                 <a href="#0">City Walk</a>
                                 <a href="#0">English - 2D</a>
@@ -129,7 +136,7 @@ function MovieSeat() {
                 <div className="container">
                     <div className="page-title-area">
                         <div className="item md-order-1">
-                            <Link className="custom-button back-button" to={`/movieticket/${movies.id}`}>
+                            <Link className="custom-button back-button" to={`/movieticket/${movie.id}`}>
                                 <i className="flaticon-double-right-arrows-angles" />
                                 back
                             </Link>
@@ -155,7 +162,7 @@ function MovieSeat() {
                         className="screen-area"
                         style={{ textAlign: 'center', display: 'block', margin: '0 auto', marginBottom: 20 }}
                     >
-                        Room: {roomId}
+                        Room: {show.room.name}
                     </h4>
                     <div className="screen-area">
                         <h4 className="screen">screen</h4>
@@ -172,11 +179,15 @@ function MovieSeat() {
                                 <li className="seat-line" key={rowNumber}>
                                     <span>{String.fromCharCode(65 + parseInt(rowNumber) - 1)}</span>
                                     <ul className="seat--area">
-                                        {rowSeats.map((seat) => (
-                                            // <li key={seat.id} className="single-seat" onClick={() => handleSeatSelection(`${String.fromCharCode(65 + seat.row_Number - 1)}${seat.seat_Number}`)} style={{ fontWeight: isSeatSelected(`${String.fromCharCode(65 + seat.row_Number - 1)}${seat.seat_Number}`) ? 'bold' : 'normal' }}>
+                                        {rowSeats.sort((a, b) => a.seat_Number - b.seat_Number).map((seat) => (
                                             <li
                                                 key={seat.id}
-                                                className="single-seat"
+                                                className={
+                                                    seat.seatReservations.length > 0
+                                                        ? 'single-seat disabled'
+                                                        : 'single-seat'
+                                                }
+                                                disable={seat.seatReservations.length > 0}
                                                 onClick={() =>
                                                     handleSeatSelection(
                                                         `${JSON.stringify(seat)}`,
@@ -192,7 +203,24 @@ function MovieSeat() {
                                                 }}
                                             >
                                                 <img
-                                                    src={isSeatSelected(`${JSON.stringify(seat)}`) ? seated1 : seat1}
+                                                    src={
+                                                        seat.seatReservations.length > 0 &&
+                                                        new Date(seat.seatReservations[0].reservation_Expires_At) >
+                                                            new Date() // Booked
+                                                            ? selectedSeat
+                                                            : seat.seatType.id === 4 // Double
+                                                            ? isSeatSelected(`${JSON.stringify(seat)}`)
+                                                                ? seated2
+                                                                : seat2
+                                                            : seat.seatType.id === 2 || seat.seatType.id === 3 // Regular
+                                                            ? isSeatSelected(`${JSON.stringify(seat)}`)
+                                                                ? seated1
+                                                                : seat1
+                                                            : seat1
+                                                        // : seat.seatType.id === 3 // VIP
+                                                        // ? vip
+                                                        // :v
+                                                    }
                                                     alt="seat"
                                                 />
                                                 <span className="sit-num">{`${String.fromCharCode(

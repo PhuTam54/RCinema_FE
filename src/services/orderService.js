@@ -11,6 +11,17 @@ export const createOrder = async (orderData, userId, showId) => {
     }
 };
 
+export const updateOrder = async (orderData, orderId) => {
+    try {
+        const response = await httpRequest.put(`/Orders/id?id=${orderId}`, {
+            ...orderData,
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getOrder = async (orderCode) => {
     try {
         const response = await httpRequest.get(`/Orders/OrderCode?orderCode=${orderCode}`);

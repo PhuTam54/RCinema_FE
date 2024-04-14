@@ -13,6 +13,7 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as orderService from '~/services/orderService';
+import * as seatService from '~/services/seatService';
 
 function MovieFood() {
     const showData = JSON.parse(localStorage.getItem('show'));
@@ -119,6 +120,10 @@ function MovieFood() {
         price: 0,
     };
 
+    const seatReservationData = {
+        reservation_Expires_At: '',
+    };
+
     const handleCheckout = () => {
         orderService
             .createOrder(orderData, userId, showData.id)
@@ -129,14 +134,31 @@ function MovieFood() {
                         const orderId = orderResponse.id;
                         localStorage.setItem('orderCode', orderResponse.order_Code);
 
+                        // Add 5 minutes to the current time
+                        seatReservationData.reservation_Expires_At = new Date(Date.now() + 5 * 60000).toISOString();
+
                         const usedSeatIds = [];
+                        let seatReservations = [];
                         mySeats.forEach((seat) => {
                             if (!usedSeatIds.includes(seat.id)) {
                                 usedSeatIds.push(seat.id);
                                 orderTicketData.price = seat.seatType.seatPricings[0].price;
+                                orderTicketData.code = orderTicketData.code.concat(`_${seat.id}`);
                                 orderService.createOrderTicket(orderTicketData, orderId, seat.id).catch((error) => {
                                     toast.error('Failed to create order ticket', error);
                                 });
+
+                                // Bug fixed: created seat reservation for each seat but cannot save to local storage
+                                seatService
+                                    .createSeatReservation(seatReservationData, seat.id, showData.id)
+                                    .then((response) => {
+                                        seatReservations.push(response);
+                                        console.log(seatReservations);
+                                        localStorage.setItem('seatReservations', JSON.stringify(seatReservations));
+                                    })
+                                    .catch((error) => {
+                                        toast.error('Failed to create seat reservation', error);
+                                    });
                             }
                         });
 
@@ -222,7 +244,7 @@ function MovieFood() {
                                                 </div>
                                                 <div className="grid-content">
                                                     <h5 className="subtitle">{food.name}</h5>
-                                                    <form className="cart-button">
+                                                    <div className="cart-button">
                                                         <div className="cart-plus-minus">
                                                             <input
                                                                 className="cart-plus-minus-box"
@@ -246,7 +268,7 @@ function MovieFood() {
                                                         >
                                                             add
                                                         </button>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

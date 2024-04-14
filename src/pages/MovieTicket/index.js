@@ -14,7 +14,7 @@ function MovieTicket() {
   const movie = JSON.parse(localStorage.getItem('movie')) ?? {};
 
   const [selectedDate, setSelectedDate] = useState('');
-  const [shows, setShows] = useState([]);
+  const [shows, setShows] = useState([{room: {name: ''}}]);
   const { id } = useParams();
   // const [selectedRoomId, setSelectedRoomId] = useState(null); 
   const [selectedShowId, setSelectedShowId] = useState(null); 
@@ -23,9 +23,9 @@ function MovieTicket() {
   const [filteredShowsByDate, setFilteredShowsByDate] = useState([]); 
 
 
-  const handleBookButtonClick = ( showId) => {
-    // setSelectedRoomId(roomId);
-    setSelectedShowId(showId);
+  const handleBookButtonClick = (show) => {
+    localStorage.setItem('show', JSON.stringify(show));
+    setSelectedShowId(show.id);
     setShowModal(true);
   };
 
@@ -130,10 +130,10 @@ function MovieTicket() {
                       </a>
                     </div>
                     <div className="movie-name" style={{ maxWidth: "250px" }}>
-                      <div>English</div>
+                      <div>{movie.movieLanguages.map(lang => lang.language.name).join(', ')}</div>
                     </div>
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                      <button onClick={() => handleBookButtonClick( show.id)} className="custom-button" style={{marginLeft: 20}}>Book</button>
+                      <button onClick={() => handleBookButtonClick( show )} className="custom-button" style={{marginLeft: 20}}>Book</button>
                     </div>
                   </li>
                 ))}

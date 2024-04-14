@@ -53,7 +53,7 @@ function MovieCheckout() {
                 .catch((error) => {
                     console.error('Error fetching data:', error);
                 });
-        }, 1000);
+        }, 1500);
 
         const { start_Date } = showData;
 
@@ -68,23 +68,10 @@ function MovieCheckout() {
         localStorage.setItem('startDate', date);
         setStartTime(formattedStartTime);
         setStartDate(date);
-    }, [VAT]);
-
-    const getTokenData = () => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            const tokenData = token.split('.')[1];
-            const decodedToken = atob(tokenData);
-            const tokenObject = JSON.parse(decodedToken);
-            return tokenObject;
-        }
-        return null;
-    };
-
-    const userEmail = getTokenData().email;
+    }, [VAT, amountAfterVAT]);
 
     const paymentData = {
-        amount: 1
+        amount: 1,
     };
 
     const handleMethod = (paymentMethodItem) => {
@@ -102,48 +89,48 @@ function MovieCheckout() {
         //     .paymentPaypal(paymentData)
         if (paymentMethod === 'Paypal') {
             paymentData.orderType = 'Sandbox';
-            paymentData.orderDescription = "Order movie ticket";
+            paymentData.orderDescription = 'Order movie ticket';
             paymentData.name = 'Customer';
             paymentData.amount = amountAfterVAT * 23000;
             axios
-            .post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/PayPal', paymentData)
-            .then((response) => {
-                window.location.href = response.data;
-                toast.success(`Go to ${paymentMethod}`);
-            })
-            .catch((error) => {
-                toast.error('Failed to payment', error);
-            });
+                .post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/PayPal', paymentData)
+                .then((response) => {
+                    window.location.href = response.data;
+                    toast.success(`Go to ${paymentMethod}`);
+                })
+                .catch((error) => {
+                    toast.error('Failed to payment', error);
+                });
         } else if (paymentMethod === 'VnPay') {
-            paymentData.OrderId = order.id;
-            paymentData.Description = "Order movie ticket";
+            paymentData.OrderId = order?.id;
+            paymentData.Description = 'Order movie ticket';
             paymentData.FullName = 'Customer';
             paymentData.amount = amountAfterVAT * 23000;
             paymentData.CreatedDate = new Date();
             console.log(paymentData);
             axios
-            .post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/VnPay', paymentData)
-            .then((response) => {
-                window.location.href = response.data;
-                toast.success(`Go to ${paymentMethod}`);
-            })
-            .catch((error) => {
-                toast.error('Failed to payment', error);
-            });
+                .post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/VnPay', paymentData)
+                .then((response) => {
+                    window.location.href = response.data;
+                    toast.success(`Go to ${paymentMethod}`);
+                })
+                .catch((error) => {
+                    toast.error('Failed to payment', error);
+                });
         } else if (paymentMethod === 'Momo') {
-            paymentData.OrderId = order.id;
-            paymentData.OrderInfo = "Order movie ticket";
+            paymentData.OrderId = order?.id + '';
+            paymentData.OrderInfo = 'Order movie ticket';
             paymentData.FullName = 'Customer';
             paymentData.amount = amountAfterVAT * 23000;
             axios
-            .post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/Momo', paymentData)
-            .then((response) => {
-                window.location.href = response.data;
-                toast.success(`Go to ${paymentMethod}`);
-            })
-            .catch((error) => {
-                toast.error('Failed to payment', error);
-            });
+                .post('https://rmallbe20240413154509.azurewebsites.net/api/v1/Payments/Momo', paymentData)
+                .then((response) => {
+                    window.location.href = response.data;
+                    toast.success(`Go to ${paymentMethod}`);
+                })
+                .catch((error) => {
+                    toast.error('Failed to payment', error);
+                });
         } else {
             toast.error('Not supported payment method');
         }
