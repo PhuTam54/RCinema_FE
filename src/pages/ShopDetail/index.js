@@ -20,7 +20,7 @@ const ShopDetail = () => {
   
 
   useEffect(() => {
-    fetch(`https://localhost:7168/api/v1/Shops/id?id=${id}`)
+    fetch(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Shops/id?id=${id}`)
     .then((res) => res.json())
     .then((data) => setShop(data))
     .catch((err) => console.log(err));

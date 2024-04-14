@@ -26,7 +26,7 @@ function Shops() {
    const [shops, setShops] = useState([]);
 
    useEffect(() => {
-        axios.get('https://localhost:7168/api/v1/Shops')
+        axios.get('https://rmallbe20240413154509.azurewebsites.net/api/v1/Shops')
         .then(res => {
             setShops(res.data)
         })
