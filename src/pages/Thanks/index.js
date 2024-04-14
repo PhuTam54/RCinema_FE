@@ -65,11 +65,10 @@ function Thanks() {
             });
 
         // Update seat reservation when payment is successful
+        const movieDuration = convertTimeToSeconds(movie.duration);
+        const reservationExpiresAt = new Date(new Date(show.start_Date).getTime() + movieDuration * 60000);
         seatReservations.forEach((seatReservation) => {
-            const movieDuration = convertTimeToSeconds(movie.duration);
-            const reservationExpiresAt = new Date(new Date(show.start_Date).getTime() + movieDuration * 60000);
             seatReservation.Reservation_Expires_At = reservationExpiresAt.toISOString();
-            console.log(seatReservation.Reservation_Expires_At);
             seatService
                 .updateSeatReservation(seatReservation, seatReservation.id)
                 .then((response) => {
@@ -102,7 +101,7 @@ function Thanks() {
         localStorage.removeItem('startTime');
         localStorage.removeItem('startDate');
         localStorage.removeItem('seatReservations');
-    }, 1000 * 3600);
+    }, 1000 * 60);
 
     return (
         <>
