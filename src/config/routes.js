@@ -12,7 +12,7 @@ const routes = {
     signup: '/signup',
 
     shops: '/shops',
-    shopdetail: '/shopdetail',
+    shopdetail: '/shopdetail/:id',
 
     myorder: '/myorder',
     thanks: '/thanks',

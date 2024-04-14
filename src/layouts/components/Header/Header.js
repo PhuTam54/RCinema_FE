@@ -54,24 +54,7 @@ function Header() {
                 <li>
                   <a href="/movielist">Movie List</a>
                 </li>
-                <li>
-                  <a href="/moviedetail">Movie Details</a>
-                </li>
-                <li>
-                  <a href="/moviedetail">Movie Details 2</a>
-                </li>
-                <li>
-                  <a href="/movieticket">Movie Ticket Plan</a>
-                </li>
-                <li>
-                  <a href="/movieseat">Movie Seat Plan</a>
-                </li>
-                <li>
-                  <a href="/moviecheckout">Movie Checkout</a>
-                </li>
-                <li>
-                  <a href="/moviefood">Movie Food</a>
-                </li>
+                
               </ul>
             </li>
             <li>
@@ -95,20 +78,12 @@ function Header() {
               </ul>
             </li>
             <li>
-              <a href="#0">sports</a>
+              <a href="#0">shops</a>
               <ul className="submenu">
                 <li>
-                  <a href="sports.html">Sports</a>
+                  <a href="/shops">Shops</a>
                 </li>
-                <li>
-                  <a href="sport-details.html">Sport Details</a>
-                </li>
-                <li>
-                  <a href="sports-ticket.html">Sport Ticket</a>
-                </li>
-                <li>
-                  <a href="sports-checkout.html">Sport Checkout</a>
-                </li>
+                
               </ul>
             </li>
             <li>
