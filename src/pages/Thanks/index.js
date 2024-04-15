@@ -65,9 +65,9 @@ function Thanks() {
             });
 
         // Update seat reservation when payment is successful
-        const movieDuration = convertTimeToSeconds(movie.duration);
-        const reservationExpiresAt = new Date(new Date(show.start_Date).getTime() + movieDuration * 60000);
         seatReservations.forEach((seatReservation) => {
+            const movieDuration = convertTimeToSeconds(movie.duration);
+            const reservationExpiresAt = new Date(new Date(show.start_Date).getTime() + movieDuration * 60000);
             seatReservation.Reservation_Expires_At = reservationExpiresAt.toISOString();
             seatService
                 .updateSeatReservation(seatReservation, seatReservation.id)
