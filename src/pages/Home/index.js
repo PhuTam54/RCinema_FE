@@ -515,7 +515,7 @@ function Home() {
               </a>
             </div>
             <div className="row mb-30-none justify-content-center">
-              {shops.map((shop, index) => (
+              {shops.slice(0,3).map((shop, index) => (
               <div key={index} className="col-sm-6 col-lg-4">
                 <div className="sports-grid">
                   <div className="movie-thumb c-thumb">

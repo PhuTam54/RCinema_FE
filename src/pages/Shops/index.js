@@ -10,12 +10,7 @@ import sidebar1 from "~/assets/images/sidebar/banner/banner01.jpg"
 import sidebar2 from "~/assets/images/sidebar/banner/banner02.jpg"
 import shop from "~/assets/images/banner/shop.jpg"
 
-import movie4 from "~/assets/images/movie/movie04.jpg"
 
-
-import shop1 from "~/assets/images/shop/shop1.png"
-import shop2 from "~/assets/images/shop/shop2.png"
-import shop3 from "~/assets/images/shop/shop3.png"
 import { Link } from "react-router-dom"
 import React, {useState, useEffect} from "react"
 import axios from 'axios';
@@ -24,6 +19,8 @@ import { useParams } from 'react-router-dom';
 
 function Shops() {
    const [shops, setShops] = useState([]);
+   const [currentPage, setCurrentShop] = useState(1);
+   const shopsPerPage = 9;
 
    useEffect(() => {
         axios.get('https://rmallbe20240413154509.azurewebsites.net/api/v1/Shops')
@@ -33,8 +30,14 @@ function Shops() {
         .catch(err => {
             console.log(err)
         })
-    }, []) 
+    }, []) ;
+    //get current shops
+    const indexOfLastShop = currentPage * shopsPerPage;
+    const indexOfFirstShop = indexOfLastShop - shopsPerPage;
+    const currentShops = shops.slice(indexOfFirstShop, indexOfLastShop);
 
+    const paginate = (pageNumber) => setCurrentShop(pageNumber);
+    const totalPages = Math.ceil(shops.length / shopsPerPage);
 
     return (  
         <>
@@ -445,7 +448,7 @@ function Shops() {
                     <div className="tab-item active">
 
                     <div className="row mb-10 justify-content-center">
-                      {shops.map((shop, index) => (
+                      {currentShops.map((shop, index) => (
                         <div key={index} className="col-sm-6 col-lg-4">
                           <div className="movie-grid">
                             <div className="movie-thumb c-thumb">
@@ -474,7 +477,7 @@ function Shops() {
                     </div>
                     <div className="tab-item">
                     <div className="movie-area mb-10">
-                    {shops.map((shop, index) => ( 
+                    {currentShops.map((shop, index) => ( 
                         <div key={index} className="movie-list">
                           <div className="movie-thumb c-thumb">
                           <Link
@@ -541,22 +544,25 @@ function Shops() {
                     </div>
                   </div>
                   <div className="pagination-area text-center">
-                    <a href="#0">
-                      <i className="fas fa-angle-double-left" />
-                      <span>Prev</span>
-                    </a>
-                    <a href="#0">1</a>
-                    <a href="#0">2</a>
-                    <a href="#0" className="active">
-                      3
-                    </a>
-                    <a href="#0">4</a>
-                    <a href="#0">5</a>
-                    <a href="#0">
-                      <span>Next</span>
-                      <i className="fas fa-angle-double-right" />
-                    </a>
-                  </div>
+        <a href="#0" onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}>
+          <i className="fas fa-angle-double-left" />
+          <span>Prev</span>
+        </a>
+        {[...Array(totalPages)].map((e, i) => (
+          <a 
+            key={i} 
+            href="#0" 
+            onClick={() => paginate(i + 1)}
+            className={currentPage === i + 1 ? 'active' : ''}
+          >
+            {i + 1}
+          </a>
+        ))}
+        <a href="#0" onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}>
+          <span>Next</span>
+          <i className="fas fa-angle-double-right" />
+        </a>
+      </div>
                 </div>
               </div>
             </div>
