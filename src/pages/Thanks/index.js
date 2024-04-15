@@ -68,7 +68,7 @@ function Thanks() {
         seatReservations.forEach((seatReservation) => {
             const movieDuration = convertTimeToSeconds(movie.duration);
             const reservationExpiresAt = new Date(new Date(show.start_Date).getTime() + movieDuration * 60000);
-            seatReservation.Reservation_Expires_At = reservationExpiresAt.toISOString();
+            seatReservation.reservation_Expires_At = reservationExpiresAt.toISOString();
             seatService
                 .updateSeatReservation(seatReservation, seatReservation.id)
                 .then((response) => {
