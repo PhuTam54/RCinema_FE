@@ -35,7 +35,7 @@ function Home() {
           .catch((error) => {
               console.error('Error fetching data:', error);
           });
-          axios.get('https://localhost:7168/api/v1/Shops')
+          axios.get('https://rmallbe20240413154509.azurewebsites.net/api/v1/Shops')
       .then(response => {
         setShops(response.data);
       })
@@ -515,7 +515,7 @@ function Home() {
               </a>
             </div>
             <div className="row mb-30-none justify-content-center">
-              {shops.map((shop, index) => (
+              {shops.slice(0,3).map((shop, index) => (
               <div key={index} className="col-sm-6 col-lg-4">
                 <div className="sports-grid">
                   <div className="movie-thumb c-thumb">

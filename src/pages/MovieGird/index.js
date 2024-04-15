@@ -6,13 +6,10 @@ import city from "~/assets/images/ticket/city.png"
 import date from "~/assets/images/ticket/date.png"
 import cinema from "~/assets/images/ticket/cinema.png"
 import banner from "~/assets/images/banner/banner02.jpg"
-import banner1 from "~/assets/images/ticket/ticket-bg01.jpg"
+
 import sidebar1 from "~/assets/images/sidebar/banner/banner01.jpg"
 import sidebar2 from "~/assets/images/sidebar/banner/banner02.jpg"
-import movie1 from "~/assets/images/movie/movie01.jpg"
-import movie2 from "~/assets/images/movie/movie02.jpg"
-import movie3 from "~/assets/images/movie/movie03.jpg"
-import movie4 from "~/assets/images/movie/movie04.jpg"
+
 
 import tomato from "~/assets/images/movie/tomato.png"
 import cake from "~/assets/images/movie/cake.png"
@@ -26,6 +23,9 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 function MovieGird() {
   const [movies, setMovies] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentGenres, setCurrentGenres] = useState([]);
+  const moviesPerPage = 9;
 
   useEffect(() => {
       axios
@@ -37,6 +37,11 @@ function MovieGird() {
               console.error('Error fetching data:', error);
           });
       }, []);
+      const indexOfLastMovie = currentPage * moviesPerPage;
+      const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
+      const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
+      const paginate = (pageNumber) => setCurrentPage(pageNumber);
+      const totalPages = Math.ceil(movies.length / moviesPerPage);
 
 
     return (
@@ -447,7 +452,7 @@ function MovieGird() {
                 <div className="tab-area">
                   <div className="tab-item active">
                     <div className="row mb-10 justify-content-center">
-                      {movies.map((movie, index) => (
+                      {currentMovies.map((movie, index) => (
                         <div key={index} className="col-sm-6 col-lg-4">
                           <div className="movie-grid">
                             <div className="movie-thumb c-thumb">
@@ -493,7 +498,7 @@ function MovieGird() {
                   </div>
                   <div className="tab-item">
                     <div className="movie-area mb-10">
-                      {movies.map((movie, index) => (
+                      {currentMovies.map((movie, index) => (
                       <div key={index} className="movie-list">
                         <div className="movie-thumb c-thumb">
                           <a
@@ -586,22 +591,25 @@ function MovieGird() {
                   </div>
                 </div>
                 <div className="pagination-area text-center">
-                  <a href="#0">
-                    <i className="fas fa-angle-double-left" />
-                    <span>Prev</span>
-                  </a>
-                  <a href="#0">1</a>
-                  <a href="#0">2</a>
-                  <a href="#0" className="active">
-                    3
-                  </a>
-                  <a href="#0">4</a>
-                  <a href="#0">5</a>
-                  <a href="#0">
-                    <span>Next</span>
-                    <i className="fas fa-angle-double-right" />
-                  </a>
-                </div>
+        <a href="#0" onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}>
+          <i className="fas fa-angle-double-left" />
+          <span>Prev</span>
+        </a>
+        {[...Array(totalPages)].map((e, i) => (
+          <a 
+            key={i} 
+            href="#0" 
+            onClick={() => paginate(i + 1)}
+            className={currentPage === i + 1 ? 'active' : ''}
+          >
+            {i + 1}
+          </a>
+        ))}
+        <a href="#0" onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}>
+          <span>Next</span>
+          <i className="fas fa-angle-double-right" />
+        </a>
+      </div>
               </div>
             </div>
           </div>
