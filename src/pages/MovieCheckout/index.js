@@ -36,24 +36,22 @@ function MovieCheckout() {
     const paymentMethodList = ['VnPay', 'Momo', 'Paypal', 'Credit card'];
 
     useEffect(() => {
-        setTimeout(() => {
-            orderService
-                .getOrder(orderCode)
-                .then((response) => {
-                    setOrder(response);
-                    if (response.final_Total > 50) {
-                        setVAT(parseFloat((0.1 * response.final_Total).toFixed(2)));
-                    } else if (response.final_Total > 10) {
-                        setVAT(parseFloat((0.05 * response.final_Total).toFixed(2)));
-                    } else {
-                        setVAT(parseFloat((0.01 * response.final_Total).toFixed(2)));
-                    }
-                    setAmountAfterVAT(ticketsPrice + foodsPrice + VAT);
-                })
-                .catch((error) => {
-                    console.error('Error fetching data:', error);
-                });
-        }, 1500);
+        orderService
+            .getOrder(orderCode)
+            .then((response) => {
+                setOrder(response);
+                if (response.final_Total > 50) {
+                    setVAT(parseFloat((0.1 * response.final_Total).toFixed(2)));
+                } else if (response.final_Total > 10) {
+                    setVAT(parseFloat((0.05 * response.final_Total).toFixed(2)));
+                } else {
+                    setVAT(parseFloat((0.01 * response.final_Total).toFixed(2)));
+                }
+                setAmountAfterVAT(ticketsPrice + foodsPrice + VAT);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
 
         const { start_Date } = showData;
 
@@ -68,7 +66,7 @@ function MovieCheckout() {
         localStorage.setItem('startDate', date);
         setStartTime(formattedStartTime);
         setStartDate(date);
-    }, [VAT, amountAfterVAT]);
+    }, [startTime, startDate, VAT, amountAfterVAT]);
 
     const paymentData = {
         amount: 1,

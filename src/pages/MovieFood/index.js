@@ -153,7 +153,6 @@ function MovieFood() {
                                     .createSeatReservation(seatReservationData, seat.id, showData.id)
                                     .then((response) => {
                                         seatReservations.push(response);
-                                        console.log(seatReservations);
                                         localStorage.setItem('seatReservations', JSON.stringify(seatReservations));
                                     })
                                     .catch((error) => {
@@ -174,6 +173,7 @@ function MovieFood() {
                         localStorage.setItem('selectedFoods', JSON.stringify(selectedFoods));
                     })
                     .then(() => {
+                        window.location.href = `/moviecheckout/${movie.id}/show/${showData.id}`;
                         toast.success('Order has been created');
                     })
                     .catch((error) => {
@@ -354,14 +354,13 @@ function MovieFood() {
                                         ${totalPrice + bill.reduce((acc, curr) => acc + curr.price * curr.qty, 0)}
                                     </span>
                                 </h6>
-                                <Link
+                                <div
                                     onClick={handleCheckout}
                                     className="custom-button"
-                                    to={`/moviecheckout/${movie.id}/show/${showData.id}`}
                                 >
                                     Seat Plans
                                     <i className="fas fa-angle-right" />
-                                </Link>
+                                </div>
                             </div>
                             <div className="note">
                                 <h5 className="title">Note :</h5>
