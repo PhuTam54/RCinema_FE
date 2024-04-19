@@ -4,9 +4,7 @@ import side1 from "~/assets/images/sidebar/offer01.png"
 import side2 from "~/assets/images/sidebar/offer02.png"
 import side3 from "~/assets/images/sidebar/offer03.png"
 import banner01 from "~/assets/images/sidebar/banner/banner01.jpg"
-import shop1_2 from "~/assets/images/shop/shop1-2.jpg"
-import shop1_1 from "~/assets/images/shop/shop1-1.jpg"
-import shop1_3 from "~/assets/images/shop/shop1-3.jpg"
+
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';

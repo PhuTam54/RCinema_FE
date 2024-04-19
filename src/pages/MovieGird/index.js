@@ -23,9 +23,11 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 function MovieGird() {
   const [movies, setMovies] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [languages, setLanguages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentGenres, setCurrentGenres] = useState([]);
   const moviesPerPage = 9;
+
 
   useEffect(() => {
       axios
@@ -36,7 +38,43 @@ function MovieGird() {
           .catch((error) => {
               console.error('Error fetching data:', error);
           });
+          axios
+          .get('https://rmallbe20240413154509.azurewebsites.net/api/v1/Genres')
+          .then((response) => {
+            setGenres(response.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching genres:', error);
+          });
+          axios
+          .get('https://rmallbe20240413154509.azurewebsites.net/api/v1/Languages')
+          .then((response) => {
+            setLanguages(response.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching languages:', error);
+          });
       }, []);
+      const filterByGenre = (genreId) => {
+        axios
+          .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Movies/genreId?genreId=${genreId}`)
+          .then((response) => {
+            setMovies(response.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching movies by genre:', error);
+          });
+      };
+      const filterByLanguage = (languageId) => {
+        axios
+          .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Movies/languageId?languageId=${languageId}`)
+          .then((response) => {
+            setMovies(response.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching movies by language:', error);
+          });
+      };
       const indexOfLastMovie = currentPage * moviesPerPage;
       const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
       const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
@@ -291,116 +329,64 @@ function MovieGird() {
               <div className="widget-1 widget-check">
                 <div className="widget-header">
                   <h5 className="m-title">Filter By</h5>{" "}
-                  <a href="#0" className="clear-check">
-                    Clear All
-                  </a>
+                  <a
+  href="#0"
+  className="clear-check"
+  onClick={(e) => {
+    e.preventDefault();
+    axios
+      .get('https://localhost:7168/api/v1/Movies')
+      .then((response) => {
+        setMovies(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }}
+>
+  Clear All
+</a>
                 </div>
                 <div className="widget-1-body">
-                  <h6 className="subtitle">Language</h6>
-                  <div className="check-area">
-                    <div className="form-group">
-                      <input type="checkbox" name="lang" id="lang1" />
-                      <label htmlFor="lang1">Tamil</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="lang" id="lang2" />
-                      <label htmlFor="lang2">Telegu</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="lang" id="lang3" />
-                      <label htmlFor="lang3">Hindi</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="lang" id="lang4" />
-                      <label htmlFor="lang4">English</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="lang" id="lang5" />
-                      <label htmlFor="lang5">Multiple Language</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="lang" id="lang6" />
-                      <label htmlFor="lang6">Gujrati</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="lang" id="lang7" />
-                      <label htmlFor="lang7">Bangla</label>
-                    </div>
-                  </div>
-                </div>
+    <h6 className="subtitle">Language</h6>
+    <div className="check-area">
+      {languages.map((language, index) => (
+        <div className="form-group" key={index}>
+          <a
+            href="#0"
+            onClick={(e) => {
+              e.preventDefault();
+              filterByLanguage(language.id);
+            }}
+          >
+            {language.name}
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
               </div>
+              
               <div className="widget-1 widget-check">
-                <div className="widget-1-body">
-                  <h6 className="subtitle">experience</h6>
-                  <div className="check-area">
-                    <div className="form-group">
-                      <input type="checkbox" name="mode" id="mode1" />
-                      <label htmlFor="mode1">2d</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="mode" id="mode2" />
-                      <label htmlFor="mode2">3d</label>
-                    </div>
-                  </div>
-                  <div className="add-check-area">
-                    <a href="#0">
-                      view more <i className="plus" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="widget-1 widget-check">
-                <div className="widget-1-body">
-                  <h6 className="subtitle">genre</h6>
-                  <div className="check-area">
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre1" />
-                      <label htmlFor="genre1">thriller</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre2" />
-                      <label htmlFor="genre2">horror</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre3" />
-                      <label htmlFor="genre3">drama</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre4" />
-                      <label htmlFor="genre4">romance</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre5" />
-                      <label htmlFor="genre5">action</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre6" />
-                      <label htmlFor="genre6">comedy</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre7" />
-                      <label htmlFor="genre7">romantic</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre8" />
-                      <label htmlFor="genre8">animation</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre9" />
-                      <label htmlFor="genre9">sci-fi</label>
-                    </div>
-                    <div className="form-group">
-                      <input type="checkbox" name="genre" id="genre10" />
-                      <label htmlFor="genre10">adventure</label>
-                    </div>
-                  </div>
-                  <div className="add-check-area">
-                    <a href="#0">
-                      view more <i className="plus" />
-                    </a>
-                  </div>
-                </div>
-              </div>
+  <div className="widget-1-body">
+    <h6 className="subtitle">genre</h6>
+    <div className="check-area">
+      {genres.map((genre, index) => (
+        <div className="form-group" key={index}>
+          <a
+            href="#0"
+            onClick={(e) => {
+              e.preventDefault();
+              filterByGenre(genre.id);
+            }}
+          >
+            {genre.name}
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
               <div className="widget-1 widget-banner">
                 <div className="widget-1-body">
                   <a href="#0">

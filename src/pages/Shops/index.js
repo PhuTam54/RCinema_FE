@@ -7,7 +7,7 @@ import cinema from "~/assets/images/ticket/cinema.png"
 
 import banner1 from "~/assets/images/ticket/ticket-bg01.jpg"
 import sidebar1 from "~/assets/images/sidebar/banner/banner01.jpg"
-import sidebar2 from "~/assets/images/sidebar/banner/banner02.jpg"
+
 import shop from "~/assets/images/banner/shop.jpg"
 
 
@@ -19,6 +19,7 @@ import { useParams } from 'react-router-dom';
 
 function Shops() {
    const [shops, setShops] = useState([]);
+   const [floors, setFloors] = useState([]);
    const [currentPage, setCurrentShop] = useState(1);
    const shopsPerPage = 9;
 
@@ -29,8 +30,25 @@ function Shops() {
         })
         .catch(err => {
             console.log(err)
+        });
+        axios.get('https://rmallbe20240413154509.azurewebsites.net/api/v1/Floors')
+        .then(res => {
+            setFloors(res.data)
         })
+        .catch(err => {
+            console.log(err)
+        });
     }, []) ;
+    const filterByFloor = (floorId) => {
+      axios
+      .get(`https://rmallbe20240413154509.azurewebsites.net/api/v1/Shops/floor?floorId=${floorId}`)
+      .then(res => {
+         setShops(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      });
+    };
     //get current shops
     const indexOfLastShop = currentPage * shopsPerPage;
     const indexOfFirstShop = indexOfLastShop - shopsPerPage;
@@ -284,128 +302,52 @@ function Shops() {
                   </div>
                 </div>
                 <div className="widget-1 widget-check">
-                  <div className="widget-header">
-                    <h5 className="m-title">Filter By</h5>{" "}
-                    <a href="#0" className="clear-check">
-                      Clear All
-                    </a>
-                  </div>
-                  <div className="widget-1-body">
-                    <h6 className="subtitle">Language</h6>
-                    <div className="check-area">
-                      <div className="form-group">
-                        <input type="checkbox" name="lang" id="lang1" />
-                        <label htmlFor="lang1">Tamil</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="lang" id="lang2" />
-                        <label htmlFor="lang2">Telegu</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="lang" id="lang3" />
-                        <label htmlFor="lang3">Hindi</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="lang" id="lang4" />
-                        <label htmlFor="lang4">English</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="lang" id="lang5" />
-                        <label htmlFor="lang5">Multiple Language</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="lang" id="lang6" />
-                        <label htmlFor="lang6">Gujrati</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="lang" id="lang7" />
-                        <label htmlFor="lang7">Bangla</label>
-                      </div>
-                    </div>
-                  </div>
+                <div className="widget-header">
+                  <h5 className="m-title">Filter By</h5>{" "}
+                  <a
+  href="#0"
+  className="clear-check"
+  onClick={(e) => {
+    e.preventDefault();
+    axios
+      .get('https://rmallbe20240413154509.azurewebsites.net/api/v1/Shops')
+      .then((response) => {
+        setShops(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }}
+>
+  Clear All
+</a>
+                </div>
+                  
                 </div>
                 <div className="widget-1 widget-check">
                   <div className="widget-1-body">
-                    <h6 className="subtitle">experience</h6>
-                    <div className="check-area">
-                      <div className="form-group">
-                        <input type="checkbox" name="mode" id="mode1" />
-                        <label htmlFor="mode1">2d</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="mode" id="mode2" />
-                        <label htmlFor="mode2">3d</label>
-                      </div>
+                    <h6 className="subtitle">floor</h6>
+                    
+                      <div className="check-area">
+                      {floors.map((floor, index) => (
+                        <div className="form-group" key={index}>
+                          <a
+                            href="#0"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              filterByFloor(floor.id);
+                            }}
+                          >
+                            {floor.id}
+                          </a>
+                        </div>
+                      ))}
                     </div>
-                    <div className="add-check-area">
-                      <a href="#0">
-                        view more <i className="plus" />
-                      </a>
-                    </div>
+                    
                   </div>
                 </div>
-                <div className="widget-1 widget-check">
-                  <div className="widget-1-body">
-                    <h6 className="subtitle">genre</h6>
-                    <div className="check-area">
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre1" />
-                        <label htmlFor="genre1">thriller</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre2" />
-                        <label htmlFor="genre2">horror</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre3" />
-                        <label htmlFor="genre3">drama</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre4" />
-                        <label htmlFor="genre4">romance</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre5" />
-                        <label htmlFor="genre5">action</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre6" />
-                        <label htmlFor="genre6">comedy</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre7" />
-                        <label htmlFor="genre7">romantic</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre8" />
-                        <label htmlFor="genre8">animation</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre9" />
-                        <label htmlFor="genre9">sci-fi</label>
-                      </div>
-                      <div className="form-group">
-                        <input type="checkbox" name="genre" id="genre10" />
-                        <label htmlFor="genre10">adventure</label>
-                      </div>
-                    </div>
-                    <div className="add-check-area">
-                      <a href="#0">
-                        view more <i className="plus" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="widget-1 widget-banner">
-                  <div className="widget-1-body">
-                    <a href="#0">
-                      <img
-                        src={sidebar2}
-                        alt="banner"
-                      />
-                    </a>
-                  </div>
-                </div>
+                
+                
               </div>
               <div className="col-lg-9 mb-50 mb-lg-0">
                 <div className="filter-tab tab">
