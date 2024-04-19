@@ -1,8 +1,8 @@
+import React, { useRef } from 'react';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import del1 from '~/assets/images/movie/movie-bg-proceed.jpg';
-import logo from '~/assets/images/logo/logo.png';
-import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-
 import * as orderService from '~/services/orderService';
 import * as seatService from '~/services/seatService';
 
@@ -103,6 +103,18 @@ function Thanks() {
         localStorage.removeItem('seatReservations');
     }, 1000 * 60);
 
+    const componentRef = useRef();
+    const handleDownloadPDF = () => {
+        html2canvas(componentRef.current).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF();
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('hoa-don.pdf');
+        });
+    };
     return (
         <>
             <section
@@ -128,7 +140,7 @@ function Thanks() {
                 <div className="container"></div>
             </section>
 
-            <div className="col-lg-4" style={{ margin: 'auto', marginBottom: 100, marginTop: 100 }}>
+            <div ref={componentRef} className="col-lg-4" style={{ margin: 'auto', marginBottom: 20, marginTop: 100 }}>
                 <div className="booking-summery bg-one">
                     <h4 className="title"> cinema ticket</h4>
                     <ul>
@@ -211,12 +223,12 @@ function Thanks() {
                         <span>--QR Code-- </span>
                     </div>
                 </div>
-                <div className="text-center" style={{ marginTop: 20 }}>
-                    <a className="custom-button" style={{ width: 185 }} href="" download="bill.pdf">
-                        Download Bill
-                    </a>
-                </div>
             </div>
+            <div className="text-center" style={{ marginBottom: 80 }}>
+                <button className="custom-button" style={{ width: 185 }} onClick={handleDownloadPDF}>
+                Download Bill
+                </button>
+             </div>
         </>
     );
 }
