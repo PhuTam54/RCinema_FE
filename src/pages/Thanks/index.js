@@ -103,9 +103,10 @@ function Thanks() {
         localStorage.removeItem('seatReservations');
     }, 1000 * 60);
 
+
     const componentRef = useRef();
     const handleDownloadPDF = () => {
-        html2canvas(componentRef.current).then((canvas) => {
+        html2canvas(componentRef.current, { backgroundColor: '#ffffff' }).then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF();
             const imgProps = pdf.getImageProperties(imgData);
@@ -135,45 +136,46 @@ function Thanks() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section>  
             <section className="page-title bg-one">
                 <div className="container"></div>
             </section>
 
-            <div ref={componentRef} className="col-lg-4" style={{ margin: 'auto', marginBottom: 20, marginTop: 100 }}>
-                <div className="booking-summery bg-one">
-                    <h4 className="title"> cinema ticket</h4>
+
+            <div ref={componentRef} className="col-lg-4" style={{ background:"white",margin: 'auto', marginBottom: 20, marginTop: 100 }}>
+                <div className="booking-summery bg-one" style={{background:"white"}}>
+                    <h4 style={{color:"black"}} className="title"> cinema ticket</h4>
                     <ul>
                         <li>
-                            <h6 className="subtitle">{movie.title}</h6>
-                            <span className="info">English-2d</span>
+                            <h6 style={{color:"black"}} className="subtitle">{movie.title}</h6>
+                            <span style={{color:"black"}} className="info">English-2d</span>
                         </li>
                         <li>
-                            <h6 className="subtitle">
+                            <h6 style={{color:"black"}} className="subtitle">
                                 <span>Time</span>
                                 <span>Seats</span>
                             </h6>
-                            <div className="info">
+                            <div style={{color:"black"}} className="info">
                                 <span>
                                     {startDate}, {startTime}
                                 </span>
-                                <div>{selectedSeatName.join(', ')}</div>
+                                <div style={{color:"black"}}>{selectedSeatName.join(', ')}</div>
                             </div>
                         </li>
                         <li>
-                            <h6 className="subtitle mb-0">
+                            <h6 style={{color:"black"}} className="subtitle mb-0">
                                 <span>Tickets Price</span>
                                 <span>${ticketsPrice}</span>
                             </h6>
                         </li>
                     </ul>
-                    <ul className="side-shape">
+                    <ul style={{backgroundColor:"white"}} className="side-shape">
                         <li>
-                            <h6 className="subtitle">
+                            <h6 style={{color:"black"}} className="subtitle">
                                 <span>combos</span>
                                 <span>${foodsPrice}</span>
                             </h6>
-                            <span className="info">
+                            <span style={{color:"black"}} className="info">
                                 {order &&
                                     order.orderFoods &&
                                     order.orderFoods?.map((orderFood, index) => (
@@ -188,8 +190,8 @@ function Thanks() {
                             </span>
                         </li>
                         <li>
-                            <h6 className="subtitle">
-                                <span>food &amp; bevarage</span>
+                            <h6 style={{color:"black"}} className="subtitle">
+                                <span style={{color:"black"}}>food &amp; bevarage</span>
                             </h6>
                             {/* <span className="info">
                                             {order.orderFoods.map((orderFood) => (
@@ -200,24 +202,24 @@ function Thanks() {
                     </ul>
                     <ul>
                         <li>
-                            <span className="info">
-                                <span>Total price</span>
+                            <span style={{color:"black"}} className="info">
+                                <span style={{color:"black"}}>Total price</span>
                                 <span>${order && order.final_Total}</span>
                             </span>
-                            <span className="info">
+                            <span style={{color:"black"}} className="info">
                                 <span>vat</span>
                                 <span>${VAT}</span>
                             </span>
                         </li>
                     </ul>
                 </div>
-                <div className="proceed-area  text-center">
-                    <h6 className="subtitle">
+                <div style={{background:"white", color:"black"}} className="proceed-area  text-center">
+                    <h6 style={{color:"black"}} className="subtitle">
                         <span>Amount Payable</span>
                         <span>${amountAfterVAT}</span>
                     </h6>
                     <hr />
-                    <div>
+                    <div style={{color:"black"}}>
                         <p>Thank you for choosing our services. We appreciate your trust in our products.</p>
                         <p style={{ color: 'red' }}>NOTE: Please present your bill at the ticket counter.</p>
                         <span>--QR Code-- </span>
